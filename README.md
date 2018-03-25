@@ -22,11 +22,11 @@ A program attempts to do some parallel operations at the same time, but requires
 
 ## Thread的wait和notify
 
-<img src="https://github.com/Ziang-Lu/Miscellaneous-Topics-in-Java-and-Python/blob/master/Multi-processing%20and%20Multi-threading/thread_wait.png?raw=true" width="400px">
+<img src="https://github.com/Ziang-Lu/Multiprocessing-and-Multithreading/blob/master/thread_wait.png?raw=true" width="400px">
 
 
 
-<img src="https://github.com/Ziang-Lu/Miscellaneous-Topics-in-Java-and-Python/blob/master/Multi-processing%20and%20Multi-threading/thread_notify.png?raw=true" width="400px">
+<img src="https://github.com/Ziang-Lu/Multiprocessing-and-Multithreading/blob/master/thread_notify.png?raw=true" width="400px">
 
 ### 对于Java而言:
 
@@ -145,7 +145,7 @@ Condition(lock=None)
 
 ## Thread状态转换总结
 
-<img src="https://github.com/Ziang-Lu/Miscellaneous-Topics-in-Java-and-Python/blob/master/Multi-processing%20and%20Multi-threading/thread_status.png?raw=true" width="450px">
+<img src="https://github.com/Ziang-Lu/Multiprocessing-and-Multithreading/blob/master/thread_status.png?raw=true" width="450px">
 
 ## Thread-safety in Java Libraries
 
