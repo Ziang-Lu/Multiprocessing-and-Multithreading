@@ -17,7 +17,7 @@ import time
 balance = 0
 lock = threading.Lock()
 
-def thread_func(n):
+def thread_func(n: int) -> None:
     for i in range(10000000):
         lock.acquire()
         try:
@@ -26,7 +26,7 @@ def thread_func(n):
             lock.release()  # 确保锁一定会被释放
 
 
-def change_balance(n):
+def change_balance(n: int) -> None:
     global balance
     balance += n
     balance -= n
@@ -59,7 +59,7 @@ print(balance)
 bounded_sema = threading.BoundedSemaphore(value=2)  # A bounded semaphore with initial value 2
 
 
-def func():
+def func() -> None:
     thread_name = threading.current_thread().name
     # 请求Semaphore, 成功后计数器-1
     print('%s acquiring semaphore...' % thread_name)

@@ -14,11 +14,11 @@ import time
 from multiprocessing import Pool, Process, Queue
 
 
-def run_process(name):
+def run_process(name: str) -> None:
     print("Running child process '%s' (%d)" % (name, os.getpid()))
 
 
-def long_time_task(name):
+def long_time_task(name: str) -> None:
     print("Running task '%s' (%d)..." % (name, os.getpid()))
     start = time.time()
     time.sleep(random.random() * 3)
@@ -26,7 +26,7 @@ def long_time_task(name):
     print("Task '%s' runs %0.2f seconds." % (name, end - start))
 
 
-def write(q):
+def write(q -> Queue) -> None:
     print('Process to write (%d)' % os.getpid())
     for c in ['A', 'B', 'C']:
         print('Putting %s to queue...' % c)
@@ -34,7 +34,7 @@ def write(q):
         time.sleep(random.random())
 
 
-def read(q):
+def read(q -> Queue) -> None:
     print('Process to read (%d)' % os.getpid())
     while True:
         val = q.get(block=True)

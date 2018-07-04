@@ -11,7 +11,7 @@ import threading
 import time
 
 
-def loop():
+def loop() -> None:
     thread_name = threading.current_thread().name
     print('Running thread %s...' % thread_name)
     n = 1
@@ -22,12 +22,12 @@ def loop():
     print('Thread %s ends.' % thread_name)
 
 
-def process_thread(local, std_name):
+def process_thread(local, std_name: str) -> None:
     local.student = std_name  # 在ThreadLocal中绑定当前线程对应的student
     greet_student(local)
 
 
-def greet_student(local):
+def greet_student(local) -> None:
     student = local.student  # 从ThreadLocal中获取当前线程关联的student
     print('Hello, %s (in %s)' % (student, threading.current_thread().name))
 

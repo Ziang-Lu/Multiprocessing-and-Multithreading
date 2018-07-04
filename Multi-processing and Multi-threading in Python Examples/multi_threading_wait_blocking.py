@@ -17,7 +17,7 @@ product = None  # 商品
 condition = threading.Condition()
 
 
-def produce():
+def produce() -> None:
     if condition.acquire():  # 1. 成功获得锁定   [等待池: 空, 锁定池: 空, 已锁定: P]
         while True:
             global product
@@ -36,7 +36,7 @@ def produce():
         time.sleep(2)
 
 
-def consume():
+def consume() -> None:
     if condition.acquire():  # 1. 尝试获得锁定, 同步阻塞在锁定池中   [等待池: 空, 锁定池: C, 已锁定: P]
                              # 3. 由于P释放了锁, 成功获得锁定   [等待池: P, 锁定池: 空, 已锁定: C]
         while True:
@@ -74,7 +74,7 @@ L = None
 condition = threading.Condition()
 
 
-def print_list():
+def print_list() -> None:
     if condition.acquire():  # 1. 成功获得锁定   [等待池: 空, 锁定池: 空, 已锁定: P]
         global L
         while L is None:
@@ -87,7 +87,7 @@ def print_list():
         condition.release()  # 6. 释放锁, 同时线程结束   [等待池: 空, 锁定池: S, 已锁定: 空]
 
 
-def set_list():
+def set_list() -> None:
     if condition.acquire():  # 1. 尝试获得锁定, 同步阻塞在锁定池中   [等待池: 空, 锁定池: S, 已锁定: P]
                              # 2. 由于P释放了锁, 成功获得锁定   [等待池: P, 锁定池: C, 已锁定: S]
         global L
@@ -100,7 +100,7 @@ def set_list():
         condition.release()  # 7. 释放锁, 同时线程结束   [等待池: 空, 锁定池: 空, 已锁定: 空]
 
 
-def create_list():
+def create_list() -> None:
     if condition.acquire():  # 1. 尝试获得锁定, 同步阻塞在锁定池中   [等待池: 空, 锁定池: S C, 已锁定: P]
                              # 3. 由于S释放了锁, 成功获得锁定   [等待池: P S, 锁定池: 空, 已锁定: C]
         global L
@@ -134,7 +134,7 @@ print(L)
 event = threading.Event()
 
 
-def func():
+def func() -> None:
     thread_name = threading.current_thread().name
     print('%s waiting for event...' % thread_name)
     event.wait()  # 阻塞当前线程至等待阻塞状态, 直到其他线程调用set()使flag为true, 唤醒当前线程

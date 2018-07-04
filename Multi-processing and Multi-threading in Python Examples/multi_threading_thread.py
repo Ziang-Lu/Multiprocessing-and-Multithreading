@@ -11,7 +11,7 @@ import _thread
 import time
 
 
-def print_time(thread_name, delay):
+def print_time(thread_name: str, delay: float) -> None:
     count = 0
     while count < 3:
         time.sleep(delay)
