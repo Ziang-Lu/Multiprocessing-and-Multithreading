@@ -17,8 +17,9 @@ import time
 balance = 0
 lock = threading.Lock()
 
+
 def thread_func(n: int) -> None:
-    for i in range(10000000):
+    for _ in range(10000000):
         lock.acquire()
         try:
             change_balance(n)
@@ -62,15 +63,15 @@ bounded_sema = threading.BoundedSemaphore(value=2)  # A bounded semaphore with i
 def func() -> None:
     thread_name = threading.current_thread().name
     # 请求Semaphore, 成功后计数器-1
-    print('%s acquiring semaphore...' % thread_name)
+    print('{th_name} acquiring semaphore...'.format(th_name=thread_name))
     if bounded_sema.acquire():
-        print('%s gets semaphore' % thread_name)
+        print('{th_name} gets semaphore'.format(th_name=thread_name))
         time.sleep(4)
         # 释放Semaphore, 计数器+1
         bounded_sema.release()
 
 
-threads = [threading.Thread(target=func) for i in range(4)]
+threads = [threading.Thread(target=func) for _ in range(4)]
 for th in threads:
     th.start()
 for th in threads:

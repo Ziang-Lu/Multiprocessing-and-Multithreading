@@ -37,9 +37,9 @@ server_manager.start()
 task_q = server_manager.get_task_queue()
 result_q = server_manager.get_result_queue()
 # 设置任务
-for i in range(10):
+for _ in range(10):
     n = random.randint(0, 10000)
-    print('Put task ID %d...' % n)
+    print('Put task ID {}...'.format(n))
     task_q.put(n)
 
 
@@ -58,9 +58,9 @@ for i in range(10):
 
 # 从result_q读取任务结果
 print('Getting results...')
-for i in range(10):
+for _ in range(10):
     r = result_q.get(timeout=10)  # Will block here and wait for getting results
-    print('Result: %s' % r)
+    print('Result: {}'.format(r))
 # 关闭manager
 server_manager.shutdown()
 

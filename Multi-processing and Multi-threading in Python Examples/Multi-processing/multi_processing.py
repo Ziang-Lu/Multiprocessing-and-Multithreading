@@ -15,27 +15,30 @@ from multiprocessing import Pool, Process, Queue
 
 
 def run_process(name: str) -> None:
-    print("Running child process '%s' (%d)" % (name, os.getpid()))
+    print(
+        "Running child process '{name}' ({pid})".format(name=name,
+                                                        pid=os.getpid())
+    )
 
 
 def long_time_task(name: str) -> None:
-    print("Running task '%s' (%d)..." % (name, os.getpid()))
+    print("Running task '{name}' ({pid})...".format(name=name, pid=os.getpid()))
     start = time.time()
     time.sleep(random.random() * 3)
     end = time.time()
-    print("Task '%s' runs %0.2f seconds." % (name, end - start))
+    print("Task '{}' runs {.2}f seconds.".format(name, end - start))
 
 
-def write(q -> Queue) -> None:
-    print('Process to write (%d)' % os.getpid())
+def write(q: Queue) -> None:
+    print('Process to write ({pid}})'.format(pid=os.getpid()))
     for c in ['A', 'B', 'C']:
-        print('Putting %s to queue...' % c)
+        print('Putting {} to queue...'.format(c))
         q.put(c)
         time.sleep(random.random())
 
 
-def read(q -> Queue) -> None:
-    print('Process to read (%d)' % os.getpid())
+def read(q: Queue) -> None:
+    print('Process to read ({pid})'.format(pid=os.getpid()))
     while True:
         val = q.get(block=True)
         print('Get %s from queue' % val)
@@ -43,7 +46,7 @@ def read(q -> Queue) -> None:
 
 def main():
     # Create subprocesses using Process
-    print('Parent process %d' % os.getpid())
+    print('Parent process {pid}'.format(pid=os.getpid()))
     p = Process(target=run_process, args=('test',))
     print('Child process will start.')
     p.start()
@@ -58,7 +61,7 @@ def main():
     # Child process ends.
 
     # Create many subprocesses using Pool
-    print('Parent process %d' % os.getpid())
+    print('Parent process {pid}'.format(pid=os.getpid()))
     pool = Pool(4)  # 开启4个进程
     for i in range(5):  # 设置5个任务
         pool.apply_async(func=long_time_task, args=(i,))

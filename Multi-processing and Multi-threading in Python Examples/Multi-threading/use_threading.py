@@ -13,13 +13,13 @@ import time
 
 def loop() -> None:
     thread_name = threading.current_thread().name
-    print('Running thread %s...' % thread_name)
+    print('Running thread {th_name}...'.format(th_name=thread_name))
     n = 1
     while n < 5:
-        print('thread %s >>> %d' % (thread_name, n))
+        print('thread {} >>> {}'.format(thread_name, n))
         time.sleep(1)
         n += 1
-    print('Thread %s ends.' % thread_name)
+    print('Thread {th_name} ends.'.format(th_name=thread_name))
 
 
 def process_thread(local, std_name: str) -> None:
@@ -29,7 +29,11 @@ def process_thread(local, std_name: str) -> None:
 
 def greet_student(local) -> None:
     student = local.student  # 从ThreadLocal中获取当前线程关联的student
-    print('Hello, %s (in %s)' % (student, threading.current_thread().name))
+    print(
+        'Hello, {std} (in {th_name})'.format(
+            std=student, th_name=threading.current_thread().name
+        )
+    )
 
 
 def main():

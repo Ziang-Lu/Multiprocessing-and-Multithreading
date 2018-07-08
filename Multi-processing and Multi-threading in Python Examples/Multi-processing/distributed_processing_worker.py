@@ -23,7 +23,7 @@ WorkerQueueManager.register('get_result_queue')
 # Worker端
 
 server_addr = '127.0.0.1'
-print('Connecting to server %s...' % server_addr)
+print('Connecting to server {}...'.format(server_addr))
 # 创建manager, 端口和验证码注意与manager.py中保持一致
 worker_manager = WorkerQueueManager(address=(server_addr, 5000), authkey=b'abc')
 # 连接至服务器
@@ -32,11 +32,11 @@ worker_manager.connect()
 task_q = worker_manager.get_task_queue()
 result_q = worker_manager.get_result_queue()
 # 从task_queue获取任务, 执行任务, 并把结果写入result_queue
-for i in range(10):
+for _ in range(10):
     try:
         n = task_q.get(timeout=1)
-        print('Running task %d * %d...' % (n, n))
-        r = '%d * %d = %d' % (n, n, n * n)
+        print('Running task {n} * {n}...'.format(n=n))
+        r = '{n} * {n} = {result}'.format(n=n, result=n * n)
         time.sleep(1)
         result_q.put(r)
     except Queue.Empty:

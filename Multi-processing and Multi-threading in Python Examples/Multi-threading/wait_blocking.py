@@ -136,11 +136,11 @@ event = threading.Event()
 
 def func() -> None:
     thread_name = threading.current_thread().name
-    print('%s waiting for event...' % thread_name)
+    print('{th_name} waiting for event...'.format(th_name=thread_name))
     event.wait()  # 阻塞当前线程至等待阻塞状态, 直到其他线程调用set()使flag为true, 唤醒当前线程
 
     # 被唤醒后直接进入运行状态 (没有锁定池)
-    print('%s receives event.' % thread_name)
+    print('{th_name} receives event.'.format(th_name=thread_name))
 
 
 th1 = threading.Thread(target=func)
@@ -148,7 +148,7 @@ th2 = threading.Thread(target=func)
 th1.start()
 th2.start()
 
-print('%s sets event.' % threading.current_thread().name)
+print('{th_name} sets event.'.format(th_name=threading.current_thread().name))
 event.set()  # 发送事件通知
 
 th1.join()
