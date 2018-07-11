@@ -46,13 +46,13 @@ A thread becomes the owner of the object's monitor in one of the three ways:
 
 <br>
 
-当前线程拥有某个object的monitor时, 可以选择obj.wait()来使自己进入等待阻塞, 同时释放obj的monitor
+当前thread拥有某个object的monitor时, 可以选择obj.wait()来使自己进入等待阻塞, 同时释放obj的monitor
 
-当obj的monitor之后的拥有者线程call了obj.notify(), 唤醒obj的等待池中的任意一个线程, 收到通知的线程将自动尝试获得obj的monitor (进入obj的锁定池), 但当前线程不会释放obj的monitor
+当obj的monitor之后的拥有者thread call了obj.notify(), 唤醒obj的等待池中的任意一个thread, 收到通知的thread将自动尝试获得obj的monitor (进入obj的锁定池), 但当前thread不会释放obj的monitor
 
-若obj的monitor之后的拥有者线程call了obj.notifyAll(), 唤醒obj的等待池中的全部线程, 收到通知的全部线程将自动尝试获得obj的monitor (进入obj的锁定池), 但当前线程不会释放obj的monitor
+若obj的monitor之后的拥有者thread call了obj.notifyAll(), 唤醒obj的等待池中的全部thread, 收到通知的全部thread将自动尝试获得obj的monitor (进入obj的锁定池), 但当前thread不会释放obj的monitor
 
-*注意: 只有当某个线程重新获得了obj的monitor之后才会从obj.wait()中退出, 即obj.wait()涵盖了wait()和在obj的锁定池中成功获得锁定两部分*
+*注意: 只有当某个thread重新获得了obj的monitor之后才会从obj.wait()中退出, 即obj.wait()涵盖了wait()和在obj的锁定池中成功获得锁定两部分*
 
 <br>
 
@@ -129,17 +129,59 @@ Condition(lock=None)
 
   调用关联的锁的相应方法
 
-* wait(timeout=None)   *(使用前当前线程必须已获得锁定, 否则将抛出异常)*
+* wait(timeout=None)   *(使用前当前thread必须已获得锁定, 否则将抛出异常)*
 
-  使当前线程进入Condition的等待池等待通知, 并释放锁
+  使当前thread进入Condition的等待池等待通知, 并释放锁
 
-* notify(n=1)   *(使用前当前线程必须已获得锁定, 否则将抛出异常)*
+* notify(n=1)   *(使用前当前thread必须已获得锁定, 否则将抛出异常)*
 
-  从Condition的等待池中随机挑选一个线程来通知, 收到通知的线程将自动调用acquire()来尝试获得锁定 (进入锁定池), 但当前线程不会释放锁
+  从Condition的等待池中随机挑选一个thread来通知, 收到通知的thread将自动调用acquire()来尝试获得锁定 (进入锁定池), 但当前thread不会释放锁
 
-* notify_all()   *(使用前当前线程必须已获得锁定, 否则将抛出异常)*
+* notify_all()   *(使用前当前thread必须已获得锁定, 否则将抛出异常)*
 
-  通知Condition的等待池中的全部线程, 收到通知的全部线程将自动调用acquire()来尝试获得锁定 (进入锁定吃), 但当前线程不会释放锁
+  通知Condition的等待池中的全部thread, 收到通知的全部thread将自动调用acquire()来尝试获得锁定 (进入锁定吃), 但当前thread不会释放锁
+
+<br>
+
+#### 万恶的Python GIL (Global Interpreter Lock)
+
+**在Python中, 某个thread想要执行, 必须先拿到GIL.**
+
+*(我们可以把GIL看作是"通行证", 并且在一个Python process中, GIL只有一个. 拿不到通行证的thread, 就不允许进入CPU执行.)*
+
+=> **由于GIL的存在, Python里一个process同一时间永远只能执行一个thread (即拿到GIL的thread才能执行)**; 而每次释放GIL, thread进行锁竞争、切换thread, 会消耗资源, 这就是为什么**Python即使是在多核CPU上, multi-threading的效率也并不高**
+
+<br>
+
+在Python multi-threading下, 每个thread的执行方式:
+
+1. 获取process GIL
+
+2. 执行代码直到sleep或者是Python虚拟机将其挂起
+
+3. 释放process GIL
+
+   * 遇到IO操作
+
+     ​	=> **对于IO密集型程序, 可以在thread-A等待时, 自动切换到thread-B, 不浪费等待时间, 从而提升程序执行效率**
+
+     ​	=> **Python multi-threading对IO密集型代码比较友好**
+
+   * Python 2.x中, ticks计数达到100
+
+     ​	=> 对于CPU计算密集型程序, 由于ticks会很快达到100, 然后进行释放GIL, thread进行锁竞争、切换thread, 导致资源消耗严重
+
+   * Python 3.x中, 改为计时器达到某个阈值
+
+     ​	=> 对于CPU计算密集型程序稍微友好了一些, 但依然没有解决根本问题
+
+     => **Python multi-threading对CPU计算密集型代码不友好**
+
+<br>
+
+**结论: 多核下, 想做concurrent提升效率, 比较通用的方法是使用multi-processing, 能够有效提高执行效率**
+
+*每个process有各自独立的GIL, 互不干扰, 这样就可以真正意义上的parallel执行.*
 
 <br>
 
