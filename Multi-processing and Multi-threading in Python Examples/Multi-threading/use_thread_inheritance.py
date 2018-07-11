@@ -8,13 +8,13 @@ class.
 
 __author__ = 'Ziang Lu'
 
-import threading
+from threading import Thread
 
 import requests
 from bs4 import BeautifulSoup
 
 
-class MyThread(threading.Thread):
+class MyThread(Thread):
     __slots__ = ['_page_num']
 
     _BASE_URL = 'https://movie.douban.com/top250?start={}&filter='
@@ -24,7 +24,7 @@ class MyThread(threading.Thread):
         Constructor with parameter.
         :param page_num: int
         """
-        threading.Thread.__init__(self)
+        super().__init__()
         self._page_num = page_num
 
     def run(self):

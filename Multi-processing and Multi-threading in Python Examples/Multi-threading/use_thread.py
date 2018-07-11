@@ -7,8 +7,8 @@ Test module to create threads using _thread module (now deprecated).
 
 __author__ = 'Ziang Lu'
 
-import _thread
 import time
+from _thread import start_new_thread
 
 
 def print_time(thread_name: str, delay: float) -> None:
@@ -24,8 +24,8 @@ def print_time(thread_name: str, delay: float) -> None:
 
 def main():
     try:
-        _thread.start_new_thread(print_time, ('Thread-1', 2))
-        _thread.start_new_thread(print_time, ('Thread-2', 4))
+        start_new_thread(print_time, ('Thread-1', 2))
+        start_new_thread(print_time, ('Thread-2', 4))
     except:
         print('Error: Cannot start the thread')
 
