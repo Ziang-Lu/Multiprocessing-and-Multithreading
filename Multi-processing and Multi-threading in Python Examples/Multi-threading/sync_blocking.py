@@ -12,13 +12,18 @@ __author__ = 'Ziang Lu'
 import threading
 import time
 
-# Lock
-
 balance = 0
+
+# Lock
 lock = threading.Lock()
 
 
 def thread_func(n: int) -> None:
+    """
+    Dummy function to be run within a thread.
+    :param n: int
+    :return: None
+    """
     for _ in range(10000000):
         lock.acquire()
         try:
@@ -28,6 +33,11 @@ def thread_func(n: int) -> None:
 
 
 def change_balance(n: int) -> None:
+    """
+    Changes the balance.
+    :param n: int
+    :return: None
+    """
     global balance
     balance += n
     balance -= n
@@ -61,6 +71,10 @@ bounded_sema = threading.BoundedSemaphore(value=2)  # A bounded semaphore with i
 
 
 def func() -> None:
+    """
+    Dummy function.
+    :return: None
+    """
     thread_name = threading.current_thread().name
     # 请求Semaphore, 成功后计数器-1
     print('{th_name} acquiring semaphore...'.format(th_name=thread_name))

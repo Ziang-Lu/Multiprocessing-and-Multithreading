@@ -15,6 +15,11 @@ from multiprocessing import Pool, Process, Queue
 
 
 def run_process(name: str) -> None:
+    """
+    Dummy task to be run within a process
+    :param name: str
+    :return: None
+    """
     print(
         "Running child process '{name}' ({pid})".format(name=name,
                                                         pid=os.getpid())
@@ -22,6 +27,11 @@ def run_process(name: str) -> None:
 
 
 def long_time_task(name: str) -> None:
+    """
+    Dummy long task to be run within a process.
+    :param name: str
+    :return: Nones
+    """
     print("Running task '{name}' ({pid})...".format(name=name, pid=os.getpid()))
     start = time.time()
     time.sleep(random.random() * 3)
@@ -30,6 +40,11 @@ def long_time_task(name: str) -> None:
 
 
 def write(q: Queue) -> None:
+    """
+    Writes messages to the given queue.
+    :param q: Queue
+    :return: None
+    """
     print('Process to write ({pid}})'.format(pid=os.getpid()))
     for c in ['A', 'B', 'C']:
         print('Putting {} to queue...'.format(c))
@@ -38,6 +53,11 @@ def write(q: Queue) -> None:
 
 
 def read(q: Queue) -> None:
+    """
+    Reads messages from the given queue.
+    :param q: Queue
+    :return: None
+    """
     print('Process to read ({pid})'.format(pid=os.getpid()))
     while True:
         val = q.get(block=True)
@@ -112,7 +132,7 @@ def main():
     # 相当于在命令行中输入 nslookup
     p = subprocess.Popen(['nslookup'], stdin=subprocess.PIPE,
                          stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    output, err = p.communicate(b'set q=mx\npython.org\nexit\n')
+    output, _ = p.communicate(b'set q=mx\npython.org\nexit\n')
     # 相当于再在命令行中输入
     # set q=mx
     # python.org

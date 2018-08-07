@@ -9,10 +9,14 @@ __author__ = 'Ziang Lu'
 
 import threading
 import time
-from threading import Thread
+from threading import local, Thread
 
 
 def loop() -> None:
+    """
+    Loop to be run within a thread.
+    :return: None
+    """
     thread_name = threading.current_thread().name
     print('Running thread {th_name}...'.format(th_name=thread_name))
     n = 1
@@ -23,13 +27,25 @@ def loop() -> None:
     print('Thread {th_name} ends.'.format(th_name=thread_name))
 
 
-def process_thread(local, std_name: str) -> None:
-    local.student = std_name  # 在ThreadLocal中绑定当前thread对应的student
-    greet_student(local)
+def process_thread(local_: local, std_name: str) -> None:
+    """
+    Processes a thread and put the student of the current thread to the
+    ThreadLocal.
+    :param local_: local
+    :param std_name: str
+    :return: None
+    """
+    local_.student = std_name  # 在ThreadLocal中绑定当前thread对应的student
+    greet_student(local_)
 
 
-def greet_student(local) -> None:
-    student = local.student  # 从ThreadLocal中获取当前thread关联的student
+def greet_student(local_: local) -> None:
+    """
+    Greets the student of the current thread.
+    :param local_: local
+    :return:
+    """
+    student = local_.student  # 从ThreadLocal中获取当前thread关联的student
     print(
         'Hello, {std} (in {th_name})'.format(
             std=student, th_name=threading.current_thread().name

@@ -12,6 +12,12 @@ from _thread import start_new_thread
 
 
 def print_time(thread_name: str, delay: float) -> None:
+    """
+    Prints time within a thread.
+    :param thread_name: str
+    :param delay: float
+    :return: None
+    """
     count = 0
     while count < 3:
         time.sleep(delay)

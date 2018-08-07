@@ -75,6 +75,10 @@ condition = threading.Condition()
 
 
 def print_list() -> None:
+    """
+    Prints the list.
+    :return: None
+    """
     if condition.acquire():  # 1. 成功获得锁定   [等待池: 空, 锁定池: 空, 已锁定: P]
         global L
         while not L:
@@ -88,6 +92,10 @@ def print_list() -> None:
 
 
 def set_list() -> None:
+    """
+    Writes numbers to the list.
+    :return: None
+    """
     if condition.acquire():  # 1. 尝试获得锁定, 同步阻塞在锁定池中   [等待池: 空, 锁定池: S, 已锁定: P]
                              # 2. 由于P释放了锁, 成功获得锁定   [等待池: P, 锁定池: C, 已锁定: S]
         global L
@@ -101,6 +109,10 @@ def set_list() -> None:
 
 
 def create_list() -> None:
+    """
+    Creates the list.
+    :return: None
+    """
     if condition.acquire():  # 1. 尝试获得锁定, 同步阻塞在锁定池中   [等待池: 空, 锁定池: S C, 已锁定: P]
                              # 3. 由于S释放了锁, 成功获得锁定   [等待池: P S, 锁定池: 空, 已锁定: C]
         global L
@@ -135,6 +147,10 @@ event = threading.Event()
 
 
 def func() -> None:
+    """
+    Dummy function.
+    :return: None
+    """
     thread_name = threading.current_thread().name
     print('{th_name} waiting for event...'.format(th_name=thread_name))
     event.wait()  # 阻塞当前线程至等待阻塞状态, 直到其他线程调用set()使flag为true, 唤醒当前线程
