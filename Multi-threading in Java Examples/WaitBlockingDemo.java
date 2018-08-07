@@ -1,5 +1,7 @@
 /**
  * Self-defined queue to synchronize on.
+ *
+ * @author Ziang Lu
  */
 class MyQueue {
     /**
@@ -33,12 +35,14 @@ class MyQueue {
 /**
  * Self-defined Producer class that implements Runnable interface.
  * Writes data to a synchronized queue
+ *
+ * @author Ziang Lu
  */
 class Producer implements Runnable {
     /**
      * Queue to write data to.
      */
-    final MyQueue queue;
+    private final MyQueue queue;
 
     /**
      * Constructor with parameter.
@@ -86,12 +90,14 @@ class Producer implements Runnable {
 /**
  * Self-defined Consumer class that implements Runnable interface.
  * Reads data from a synchronized queue
+ *
+ * @author Ziang Lu
  */
 class Consumer implements Runnable {
     /**
      * Queue to read data from.
      */
-    final MyQueue queue;
+    private final MyQueue queue;
 
     /**
      * Constructor with parameter.

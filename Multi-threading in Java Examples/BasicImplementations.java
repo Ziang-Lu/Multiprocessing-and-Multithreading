@@ -4,6 +4,8 @@ import java.util.concurrent.FutureTask;
 
 /**
  * Self-defined class that implements Runnable interface.
+ *
+ * @author Ziang Lu
  */
 class MyRunnable implements Runnable {
     @Override
@@ -24,6 +26,8 @@ class MyRunnable implements Runnable {
 
 /**
  * Self-defined class that extends Thread class.
+ *
+ * @author Ziang Lu
  */
 class MyThread extends Thread {
     /**
@@ -52,6 +56,8 @@ class MyThread extends Thread {
 
 /**
  * Self-defined class that implements Callable interface.
+ *
+ * @author Ziang Lu
  */
 class MyCallable implements Callable<Integer> {
     @Override
