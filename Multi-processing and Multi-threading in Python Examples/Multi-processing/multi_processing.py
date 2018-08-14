@@ -20,10 +20,7 @@ def run_process(name: str) -> None:
     :param name: str
     :return: None
     """
-    print(
-        "Running child process '{name}' ({pid})".format(name=name,
-                                                        pid=os.getpid())
-    )
+    print(f"Running child process '{name}' ({os.getpid()})")
 
 
 def long_time_task(name: str) -> None:
@@ -32,7 +29,7 @@ def long_time_task(name: str) -> None:
     :param name: str
     :return: Nones
     """
-    print("Running task '{name}' ({pid})...".format(name=name, pid=os.getpid()))
+    print(f"Running task '{name}' ({os.getpid()})...")
     start = time.time()
     time.sleep(random.random() * 3)
     end = time.time()
@@ -45,9 +42,9 @@ def write(q: Queue) -> None:
     :param q: Queue
     :return: None
     """
-    print('Process to write ({pid}})'.format(pid=os.getpid()))
+    print(f'Process to write ({os.getpid()})')
     for c in ['A', 'B', 'C']:
-        print('Putting {} to queue...'.format(c))
+        print(f'Putting {c} to queue...')
         q.put(c)
         time.sleep(random.random())
 
@@ -58,15 +55,15 @@ def read(q: Queue) -> None:
     :param q: Queue
     :return: None
     """
-    print('Process to read ({pid})'.format(pid=os.getpid()))
+    print(f'Process to read ({os.getpid()})')
     while True:
         val = q.get(block=True)
-        print('Get %s from queue' % val)
+        print(f'Get {val} from queue')
 
 
 def main():
     # Create subprocesses using Process
-    print('Parent process {pid}'.format(pid=os.getpid()))
+    print(f'Parent process {os.getpid()}')
     p = Process(target=run_process, args=('test',))
     print('Child process will start.')
     p.start()
@@ -81,7 +78,7 @@ def main():
     # Child process ends.
 
     # Create many subprocesses using Pool
-    print('Parent process {pid}'.format(pid=os.getpid()))
+    print(f'Parent process {os.getpid()}')
     pool = Pool(4)  # 开启4个进程
     for i in range(5):  # 设置5个任务
         pool.apply_async(func=long_time_task, args=(i,))

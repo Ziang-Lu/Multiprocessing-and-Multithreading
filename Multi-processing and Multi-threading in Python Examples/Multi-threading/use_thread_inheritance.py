@@ -15,6 +15,9 @@ from bs4 import BeautifulSoup
 
 
 class MyThread(Thread):
+    """
+    My inherited thread class.
+    """
     __slots__ = ['_page_num']
 
     _BASE_URL = 'https://movie.douban.com/top250?start={}&filter='

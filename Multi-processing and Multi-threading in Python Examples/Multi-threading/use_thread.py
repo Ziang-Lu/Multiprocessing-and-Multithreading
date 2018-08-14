@@ -11,10 +11,10 @@ import time
 from _thread import start_new_thread
 
 
-def print_time(thread_name: str, delay: float) -> None:
+def print_time(th_name: str, delay: float) -> None:
     """
     Prints time within a thread.
-    :param thread_name: str
+    :param th_name: str
     :param delay: float
     :return: None
     """
@@ -22,10 +22,7 @@ def print_time(thread_name: str, delay: float) -> None:
     while count < 3:
         time.sleep(delay)
         count += 1
-        print(
-            '{th_name}: {time}'.format(th_name=thread_name,
-                                       time=time.ctime(time.time())
-        ))
+        print(f'{th_name}: {time.ctime(time.time())}')
 
 
 def main():

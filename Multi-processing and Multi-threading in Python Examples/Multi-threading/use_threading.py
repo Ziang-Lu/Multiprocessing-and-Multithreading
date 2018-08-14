@@ -17,14 +17,14 @@ def loop() -> None:
     Loop to be run within a thread.
     :return: None
     """
-    thread_name = threading.current_thread().name
-    print('Running thread {th_name}...'.format(th_name=thread_name))
+    th_name = threading.current_thread().name
+    print(f'Running thread {th_name}...')
     n = 1
     while n < 5:
-        print('thread {} >>> {}'.format(thread_name, n))
+        print(f'thread {th_name} >>> {n}')
         time.sleep(1)
         n += 1
-    print('Thread {th_name} ends.'.format(th_name=thread_name))
+    print(f'Thread {th_name} ends.')
 
 
 def process_thread(local_: local, std_name: str) -> None:
@@ -46,21 +46,18 @@ def greet_student(local_: local) -> None:
     :return:
     """
     student = local_.student  # 从ThreadLocal中获取当前thread关联的student
-    print(
-        'Hello, {std} (in {th_name})'.format(
-            std=student, th_name=threading.current_thread().name
-        )
-    )
+    th_name = threading.current_thread().name
+    print(f'Hello, {student} (in {th_name})')
 
 
 def main():
     # Create subthreads using threading.Thread
-    thread_name = threading.current_thread().name
-    print('Running thread %s...' % thread_name)
+    th_name = threading.current_thread().name
+    print(f'Running thread {th_name}...')
     th = Thread(target=loop, name='LoopThread')
     th.start()
     th.join()
-    print('Thread %s ends.' % thread_name)
+    print(f'Thread {th_name} ends.')
     print()
 
     # Output:
