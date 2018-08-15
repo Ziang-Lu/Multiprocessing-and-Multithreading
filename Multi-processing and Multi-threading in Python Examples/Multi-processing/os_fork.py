@@ -17,10 +17,7 @@ def main():
     if pid != 0:
         print(f'I ({os.getpid()}) just created a child process {pid}.')
     else:
-        print(
-            f'I am child process ({os.getpid()}) and my parent is '
-            f'{os.getppid()}.'
-        )
+        print(f'I am child process ({os.getpid()}) and my parent is {os.getppid()}.')
 
 
 if __name__ == '__main__':

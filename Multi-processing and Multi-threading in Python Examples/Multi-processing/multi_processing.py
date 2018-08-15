@@ -33,7 +33,7 @@ def long_time_task(name: str) -> None:
     start = time.time()
     time.sleep(random.random() * 3)
     end = time.time()
-    print("Task '{}' runs {.2}f seconds.".format(name, end - start))
+    print(f"Task '{name}' runs {end - start:.2f} seconds.")
 
 
 def write(q: Queue) -> None:
