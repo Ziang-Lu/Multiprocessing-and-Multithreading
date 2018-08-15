@@ -239,4 +239,4 @@ There are five levels thread-safety in Java library:
 
 # License
 
-This repo is distributed under the MIT license.
+This repo is distributed under the <a href="https://github.com/Ziang-Lu/Multiprocessing-and-Multithreading/blob/master/LICENSE">MIT license</a>.
