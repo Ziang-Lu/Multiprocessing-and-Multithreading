@@ -1,3 +1,5 @@
+This repo contains multi-threading in both Java and Python, as well as multi-processing in Python.
+
 # Multi-threading
 
 ## Thread Safety
@@ -205,7 +207,7 @@ There are five levels thread-safety in Java library:
 
    ```java
    ConcurrentHashSet<String> set = new ConcurrentHashSet<String>();
-
+   
    public void add(String s) {
      set.add(s);
    }
@@ -223,7 +225,7 @@ There are five levels thread-safety in Java library:
 
    ```java
    HashSet<String> set = new HashSet<String>();
-
+   
    public synchronized void add(String s) {
      set.add(s);
    }
@@ -232,3 +234,9 @@ There are five levels thread-safety in Java library:
 5. **Thread-hostile**
 
    These objects are not thread-safe even if you have already used external synchronization on ANY method call.
+
+<br>
+
+# License
+
+This repo is distributed under the MIT license.
