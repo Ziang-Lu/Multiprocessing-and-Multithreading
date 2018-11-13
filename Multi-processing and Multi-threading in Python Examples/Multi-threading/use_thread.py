@@ -8,6 +8,7 @@ Test module to create threads using _thread module (now deprecated).
 __author__ = 'Ziang Lu'
 
 import time
+
 from _thread import start_new_thread
 
 

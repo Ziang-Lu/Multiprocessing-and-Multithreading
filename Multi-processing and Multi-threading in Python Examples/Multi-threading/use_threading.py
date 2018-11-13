@@ -9,7 +9,7 @@ __author__ = 'Ziang Lu'
 
 import threading
 import time
-from threading import local, Thread
+from threading import Thread, local
 
 
 def loop() -> None:
