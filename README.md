@@ -109,7 +109,11 @@ public void sync() {
 }
 ```
 
+***
 
+For better capabilities to <u>monitor the lock status</u>, check out Java `ReentrantLock`: https://docs.oracle.com/javase/10/docs/api/java/util/concurrent/locks/ReentrantLock.html
+
+***
 
 <br>
 
