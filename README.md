@@ -131,19 +131,19 @@ Condition(lock=None)
 
 **实例方法:**
 
-* acquire(*args) / release()
+* `acquire(*args)` / `release()`
 
   调用关联的锁的相应方法
 
-* wait(timeout=None)   *(使用前当前thread必须已获得锁定, 否则将抛出异常)*
+* `wait(timeout=None)`   *(使用前当前thread必须已获得锁定, 否则将抛出异常)*
 
   使当前thread进入Condition的等待池等待通知, 并释放锁
 
-* notify(n=1)   *(使用前当前thread必须已获得锁定, 否则将抛出异常)*
+* `notify(n=1)`   *(使用前当前thread必须已获得锁定, 否则将抛出异常)*
 
   从Condition的等待池中随机挑选一个thread来通知, 收到通知的thread将自动调用acquire()来尝试获得锁定 (进入锁定池), 但当前thread不会释放锁
 
-* notify_all()   *(使用前当前thread必须已获得锁定, 否则将抛出异常)*
+* `notify_all()`   *(使用前当前thread必须已获得锁定, 否则将抛出异常)*
 
   通知Condition的等待池中的全部thread, 收到通知的全部thread将自动调用acquire()来尝试获得锁定 (进入锁定吃), 但当前thread不会释放锁
 
