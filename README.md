@@ -12,6 +12,66 @@ A program attempts to do some parallel operations at the same time, but requires
 
 *They are difficult to detect because oftentimes, the ordering may be correct, making the system appear functional.*
 
+***
+
+*Fuzzing* is a technique for amplifying race condition:
+
+```python
+"""
+Fuzzing is a technique for amplifying race condition to make them more visible.
+
+Basically, call fuzz() function before each operation, which simply sleeps a
+random amount of time.
+"""
+
+__author__ = 'Ziang Lu'
+
+import random
+import threading
+import time
+
+fuzz = True
+
+
+def fuzz() -> None:
+    """
+    Fuzzes the program for a random amount of time, if instructed.
+    :return: None
+    """
+    if fuzz:
+        time.sleep(random.random())
+
+
+counter = 0
+
+
+def worker() -> None:
+    """
+    :return: None
+    """
+    global counter
+
+    fuzz()
+    old_count = counter  # 1
+    fuzz()
+    counter = old_count + 1  # 2
+    # 1 + 2 makes a potential race condition
+    # To make it more visible, we introduce fuzzing, i.e., call fuzz() function
+    # before each operation.
+    fuzz()
+    print(f'The counter is {counter}')
+    fuzz()
+    print('----------')
+
+
+print('Starting up')
+for _ in range(10):
+    threading.Thread(target=worker).start()
+print('Finishing up')
+```
+
+***
+
 **Away with Race Conditions:**
 
 1. Ensure an explicit ordering of the operations
