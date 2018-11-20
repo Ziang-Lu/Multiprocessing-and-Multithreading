@@ -10,8 +10,8 @@ Task manager module.
 __author__ = 'Ziang Lu'
 
 import random
+from multiprocessing import Queue
 from multiprocessing.managers import BaseManager
-from queue import Queue
 
 # 创建发送任务的queue和接受结果的queue
 task_queue = Queue()

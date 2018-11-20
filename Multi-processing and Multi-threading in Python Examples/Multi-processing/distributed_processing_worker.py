@@ -8,8 +8,8 @@ Task worker module.
 """
 
 import time
+from multiprocessing import Queue
 from multiprocessing.managers import BaseManager
-from queue import Queue
 
 
 class WorkerQueueManager(BaseManager):
@@ -23,9 +23,10 @@ WorkerQueueManager.register('get_result_queue')
 # Worker端
 
 server_addr = '127.0.0.1'
-print('Connecting to server {}...'.format(server_addr))
+print(f'Connecting to server {server_addr}...')
 # 创建manager, 端口和验证码注意与manager.py中保持一致
-worker_manager = WorkerQueueManager(address=(server_addr, 5000), authkey=b'abc')
+worker_manager = WorkerQueueManager(
+    address=(server_addr, 5000), authkey=b'abc')
 # 连接至服务器
 worker_manager.connect()
 # 通过WorkerQueueManager封装来获取task_queue和result_queue
@@ -35,10 +36,10 @@ result_q = worker_manager.get_result_queue()
 for _ in range(10):
     try:
         n = task_q.get(timeout=1)
-        print('Running task {n} * {n}...'.format(n=n))
-        r = '{n} * {n} = {result}'.format(n=n, result=n * n)
+        print(f'Running task {n} * {n}...')
+        result = f'{n} * {n} = {n * n}'
         time.sleep(1)
-        result_q.put(r)
+        result_q.put(result)
     except Queue.Empty:
         print('Task queue is empty.')
 print('Worker exits.')

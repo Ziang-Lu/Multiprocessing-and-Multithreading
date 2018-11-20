@@ -108,7 +108,7 @@ def main():
     # Create non-self-defined subprocesses using subprocess module
     print('$ nslookup www.python.org')
     r = subprocess.call(['nslookup', 'www.python.org'])
-    # 相当于在命令行中输入 nslookup www.python.org
+    # 相当于在command line中输入 nslookup www.python.org
     print('Exit code:', r)
     print()
 
@@ -126,11 +126,11 @@ def main():
 
     # Non-self-defined subprocesses might need input
     print('$ nslookup')
-    # 相当于在命令行中输入 nslookup
+    # 相当于在command line中输入 nslookup
     p = subprocess.Popen(['nslookup'], stdin=subprocess.PIPE,
                          stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     output, _ = p.communicate(b'set q=mx\npython.org\nexit\n')
-    # 相当于再在命令行中输入
+    # 相当于再在command line中输入
     # set q=mx
     # python.org
     # exit
