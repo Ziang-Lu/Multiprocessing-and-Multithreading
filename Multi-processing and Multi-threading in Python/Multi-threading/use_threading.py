@@ -7,9 +7,8 @@ Test module to create threads using threading module.
 
 __author__ = 'Ziang Lu'
 
-import threading
 import time
-from threading import Thread, local
+from threading import Thread, current_thread, local
 
 
 def loop() -> None:
@@ -17,7 +16,7 @@ def loop() -> None:
     Loop to be run within a thread.
     :return: None
     """
-    th_name = threading.current_thread().name
+    th_name = current_thread().name
     print(f'Running thread {th_name}...')
     n = 1
     while n < 5:
@@ -46,13 +45,13 @@ def greet_student(local_: local) -> None:
     :return:
     """
     student = local_.student  # 从ThreadLocal中获取当前thread关联的student
-    th_name = threading.current_thread().name
+    th_name = current_thread().name
     print(f'Hello, {student} (in {th_name})')
 
 
 def main():
     # Create subthreads using threading.Thread
-    th_name = threading.current_thread().name
+    th_name = current_thread().name
     print(f'Running thread {th_name}...')
     th = Thread(target=loop, name='LoopThread')
     th.start()
@@ -73,7 +72,7 @@ def main():
     # Use threading.ThreadLocal to encapsulate data in each thread
     # ThreadLocal可以看做一个{thread: thread属性dict}的dict, 用于管理thread内部的数据
     # ThreadLocal封装了使用thread作为key检索对应的属性dict, 再使用属性名作为key检索属性值的细节
-    thread_local = threading.local()
+    thread_local = local()
     th_a = Thread(target=process_thread, args=(thread_local, 'Alice'),
                   name='Thread-A')
     th_b = Thread(target=process_thread, args=(thread_local, 'Bob'),

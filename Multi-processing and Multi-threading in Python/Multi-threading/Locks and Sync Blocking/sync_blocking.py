@@ -25,11 +25,11 @@ def thread_func(n: int) -> None:
     :return: None
     """
     for _ in range(10000000):
-        lock.acquire()
-        try:
+        # Note that Lock objects can be used in a traditional way, i.e., via
+        # acquire() and release() methods, but it can also simply be used as a
+        # context manager, as a syntax sugar
+        with lock:
             change_balance(n)
-        finally:
-            lock.release()  # 确保锁一定会被释放
 
 
 def change_balance(n: int) -> None:
@@ -67,7 +67,8 @@ print(balance)
 # BoundedSemaphore
 # 在Semaphore的基础上, 不允许计数器超过initial value (设置上限)
 
-bounded_sema = threading.BoundedSemaphore(value=2)  # A bounded semaphore with initial value 2
+# A bounded semaphore with initial value 2
+bounded_sema = threading.BoundedSemaphore(value=2)
 
 
 def func() -> None:
@@ -78,11 +79,12 @@ def func() -> None:
     thread_name = threading.current_thread().name
     # 请求Semaphore, 成功后计数器-1
     print('{th_name} acquiring semaphore...'.format(th_name=thread_name))
-    if bounded_sema.acquire():
+    # Note that BoundedSemaphore objects can be used in a traditional way, i.e.,
+    # via acquire() and release() methods, but it can also simply be used as a
+    # context manager, as a syntax sugar
+    with bounded_sema:  # 释放Semaphore的时候, 计数器+1
         print('{th_name} gets semaphore'.format(th_name=thread_name))
         time.sleep(4)
-        # 释放Semaphore, 计数器+1
-        bounded_sema.release()
 
 
 threads = [threading.Thread(target=func) for _ in range(4)]

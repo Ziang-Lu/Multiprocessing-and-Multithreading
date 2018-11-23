@@ -8,13 +8,13 @@ threading.Condition and threading.Event.
 
 __author__ = 'Ziang Lu'
 
-import threading
 import time
+from threading import Condition, Event, Thread, current_thread
 
 # Condition
 
 product = None  # 商品
-condition = threading.Condition()
+condition = Condition()
 
 
 def produce() -> None:
@@ -26,13 +26,14 @@ def produce() -> None:
                 print('Producing...')
                 product = 'anything'
                 # 通知消费者, 商品已生产
-                condition.notify()  # 2. 由于等待池为空, 并没有通知任何线程, 且不会释放锁   [等待池: 空, 锁定池: C, 已锁定: P]
-                                    # 6. 通知C, C自动调用acquire()来尝试获得锁定(进入锁定池), 但当前线程不会释放锁   [等待池: 空, 锁定池: C, 已锁定: P]
+                # 2. 由于等待池为空, 并没有通知任何线程, 且不会释放锁   [等待池: 空, 锁定池: C, 已锁定: P]
+                condition.notify()
+                # 6. 通知C, C自动调用acquire()来尝试获得锁定(进入锁定池), 但当前线程不会释放锁   [等待池: 空, 锁定池: C, 已锁定: P]
 
         condition.wait()  # 3. 当前线程进入等待池, 并释放锁   [等待池: P, 锁定池: C, 已锁定: 空]
-                          # 4. 接到通知, 自动调用acquire()来尝试获得锁定(进入锁定池)   [等待池: 空, 锁定池: P, 已锁定: C]
-                          # 5. 由于C释放了锁, 成功获得锁定   [等待池: C, 锁定池: 空, 已锁定: P]
-                          # 7 -> 3
+        # 4. 接到通知, 自动调用acquire()来尝试获得锁定(进入锁定池)   [等待池: 空, 锁定池: P, 已锁定: C]
+        # 5. 由于C释放了锁, 成功获得锁定   [等待池: C, 锁定池: 空, 已锁定: P]
+        # 7 -> 3
         time.sleep(2)
 
 
@@ -46,16 +47,17 @@ def consume() -> None:
                 print('Consuming...')
                 product = None
                 # 通知生产者, 商品已消耗
-                condition.notify()  # 4. 通知P, P自动调用acquire()来尝试获得锁定(进入锁定池), 但当前线程不会释放锁   [等待池: 空, 锁定池: P, 已锁定: C]
+                # 4. 通知P, P自动调用acquire()来尝试获得锁定(进入锁定池), 但当前线程不会释放锁   [等待池: 空, 锁定池: P, 已锁定: C]
+                condition.notify()
 
         condition.wait()  # 5. 当前线程进入等待池, 并释放锁   [等待池: C, 锁定池: P, 已锁定: 空]
-                          # 6. 接到通知, 自动调用acquire()来尝试获得锁定(进入锁定池)   [等待池: 空, 锁定池: C, 已锁定: P]
-                          # 7 -> 3
+        # 6. 接到通知, 自动调用acquire()来尝试获得锁定(进入锁定池)   [等待池: 空, 锁定池: C, 已锁定: P]
+        # 7 -> 3
         time.sleep(2)
 
 
-# prod_thread = threading.Thread(target=produce)
-# cons_thread = threading.Thread(target=consume)
+# prod_thread = Thread(target=produce)
+# cons_thread = Thread(target=consume)
 # prod_thread.start()
 # cons_thread.start()
 
@@ -71,7 +73,7 @@ def consume() -> None:
 # Simple demo
 
 L = None
-condition = threading.Condition()
+condition = Condition()
 
 
 def print_list() -> None:
@@ -83,8 +85,8 @@ def print_list() -> None:
         global L
         while not L:
             condition.wait()  # 2. 当前进程进入等待池, 并释放锁   [等待池: P, 锁定池: S C, 已锁定: 空]
-                              # 4. 接到通知, 自动调用acquire()来尝试获得锁定(进入锁定池)   [等待池: 空, 锁定池: P S, 已锁定: C]
-                              # 5. 由于C释放了锁, 成功获得锁定   [等待池: 空, 锁定池: S, 已锁定: P]
+            # 4. 接到通知, 自动调用acquire()来尝试获得锁定(进入锁定池)   [等待池: 空, 锁定池: P S, 已锁定: C]
+            # 5. 由于C释放了锁, 成功获得锁定   [等待池: 空, 锁定池: S, 已锁定: P]
         for i in L:
             print(i, end=' ')
         print()
@@ -101,8 +103,8 @@ def set_list() -> None:
         global L
         while not L:
             condition.wait()  # 3. 当前进程进入等待池, 并释放锁   [等待池: P S, 锁定池: C, 已锁定: 空]
-                              # 4. 接到通知, 自动调用acquire()来尝试获得锁定(进入锁定池)   [等待池: 空, 锁定池: P S, 已锁定: C]
-                              # 6. 由于P释放了锁, 成功获得锁定   [等待池: 空, 锁定池: 空, 已锁定: S]
+            # 4. 接到通知, 自动调用acquire()来尝试获得锁定(进入锁定池)   [等待池: 空, 锁定池: P S, 已锁定: C]
+            # 6. 由于P释放了锁, 成功获得锁定   [等待池: 空, 锁定池: 空, 已锁定: S]
         for i in range(len(L) - 1, -1, -1):
             L[i] = 1
         condition.release()  # 7. 释放锁, 同时线程结束   [等待池: 空, 锁定池: 空, 已锁定: 空]
@@ -118,13 +120,14 @@ def create_list() -> None:
         global L
         if not L:
             L = [0] * 10
-            condition.notify_all()  # 4. 通知P S, P S自动调用acquire尝试获取锁定(进入锁定池), 但当前线程不会释放锁   [等待池: 空, 锁定池: P S, 已锁定: C]
+            # 4. 通知P S, P S自动调用acquire尝试获取锁定(进入锁定池), 但当前线程不会释放锁   [等待池: 空, 锁定池: P S, 已锁定: C]
+            condition.notify_all()
         condition.release()  # 5. 释放锁, 同时线程结束   [等待池: 空, 锁定池: P S, 已锁定: 空]
 
 
-print_thread = threading.Thread(target=print_list)
-set_thread = threading.Thread(target=set_list)
-create_thread = threading.Thread(target=create_list)
+print_thread = Thread(target=print_list)
+set_thread = Thread(target=set_list)
+create_thread = Thread(target=create_list)
 threads = [print_thread, set_thread, create_thread]
 for th in threads:
     th.start()
@@ -143,7 +146,7 @@ print(L)
 # 管理一个初始为false的flag, 当调用set()方法时设置为true, 调用clear()方法时重置为false
 # wait()方法阻塞当前线程至等待阻塞状态, 直到其他线程调用set()使flag为true, 唤醒全部等待的线程
 
-event = threading.Event()
+event = Event()
 
 
 def func() -> None:
@@ -151,7 +154,7 @@ def func() -> None:
     Dummy function.
     :return: None
     """
-    th_name = threading.current_thread().name
+    th_name = current_thread().name
     print(f'{th_name} waiting for event...')
     event.wait()  # 阻塞当前线程至等待阻塞状态, 直到其他线程调用set()使flag为true, 唤醒当前线程
 
@@ -159,12 +162,12 @@ def func() -> None:
     print(f'{th_name} receives event.')
 
 
-th1 = threading.Thread(target=func)
-th2 = threading.Thread(target=func)
+th1 = Thread(target=func)
+th2 = Thread(target=func)
 th1.start()
 th2.start()
 
-print(f'{threading.current_thread().name} sets event.')
+print(f'{current_thread().name} sets event.')
 event.set()  # 发送事件通知
 
 th1.join()

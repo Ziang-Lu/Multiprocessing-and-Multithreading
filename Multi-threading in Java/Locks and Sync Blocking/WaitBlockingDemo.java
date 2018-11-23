@@ -18,7 +18,7 @@ class MyQueue {
      * @return n
      */
     int get() {
-        System.out.println("Got: " + n);
+        System.out.println("Got " + n + " from queue");
         return n;
     }
 
@@ -27,7 +27,7 @@ class MyQueue {
      * @param n n
      */
     void put(int n) {
-        System.out.println("Put: " + n);
+        System.out.println("Put " + n + " into the queue");
         this.n = n;
     }
 }
@@ -73,7 +73,7 @@ class Producer implements Runnable {
                                       // 5. 由于C释放了queue的monitor, 成功获得queue的monitor   [等待池: C, 锁定池: 空, 已锁定: P]
                                       // 7 -> 3
                         System.out.println("Producer got queue's monitor");
-                    } catch (InterruptedException ex) {
+                    } catch (InterruptedException e) {
                         System.out.println(Thread.currentThread().getName() + " interrupted");
                     }
                 }
@@ -125,7 +125,7 @@ class Consumer implements Runnable {
                                       // 6. 接到通知, 当前线程自动尝试获得queue的monitor(进入queue的锁定池)   [等待池: 空, 锁定池: C, 已锁定: P]
                                       // 7 -> 3
                         System.out.println("Consumer got queue's monitor");
-                    } catch (InterruptedException ex) {
+                    } catch (InterruptedException e) {
                         System.out.println(Thread.currentThread().getName() + " interrupted");
                     }
                 }
@@ -152,40 +152,40 @@ public class WaitBlockingDemo {
         try {
             producerThread.join();
             consumerThread.join();
-        } catch (InterruptedException ex) {
+        } catch (InterruptedException e) {
             System.out.println(Thread.currentThread().getName() + " interrupted");
         }
+
+        /*
+         * Output:
+         * Put: 1
+         * Waiting in producer...
+         * Got: 1 from queue
+         * Waiting in consumer...
+         * Producer got queue's monitor
+         * Put: 2
+         * Waiting in producer...
+         * Consumer got queue's monitor
+         * Got: 2 from queue
+         * Waiting in consumer...
+         * Producer got queue's monitor
+         * Put: 3
+         * Waiting in producer...
+         * Consumer got queue's monitor
+         * Got: 3 from queue
+         * Waiting in consumer...
+         * Producer got queue's monitor
+         * Put: 4
+         * Waiting in producer...
+         * Consumer got queue's monitor
+         * Got: 4
+         * Waiting in consumer...
+         * Producer got queue's monitor
+         * Put: 5
+         * Consumer got queue's monitor
+         * Got: 5
+         * Waiting in consumer...
+         */
     }
 
 }
-
-/*
- * Output:
- * Put: 1
- * Waiting in producer...
- * Got: 1
- * Waiting in consumer...
- * Producer got queue's monitor
- * Put: 2
- * Waiting in producer...
- * Consumer got queue's monitor
- * Got: 2
- * Waiting in consumer...
- * Producer got queue's monitor
- * Put: 3
- * Waiting in producer...
- * Consumer got queue's monitor
- * Got: 3
- * Waiting in consumer...
- * Producer got queue's monitor
- * Put: 4
- * Waiting in producer...
- * Consumer got queue's monitor
- * Got: 4
- * Waiting in consumer...
- * Producer got queue's monitor
- * Put: 5
- * Consumer got queue's monitor
- * Got: 5
- * Waiting in consumer...
- */

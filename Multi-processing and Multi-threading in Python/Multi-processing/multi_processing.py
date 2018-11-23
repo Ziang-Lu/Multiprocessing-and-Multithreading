@@ -12,6 +12,9 @@ import random
 import subprocess
 import time
 from multiprocessing import Pool, Process, Queue
+from typing import Tuple
+
+import requests
 
 
 def run_process(name: str) -> None:
@@ -34,6 +37,32 @@ def long_time_task(name: str) -> None:
     time.sleep(random.random() * 3)
     end = time.time()
     print(f"Task '{name}' runs {end - start:.2f} seconds.")
+
+
+sites = [
+    'http://www.cisco.com',
+    'http://www.cnn.com',
+    'http://www.facebook.com',
+    'http://www.jpython.org',
+    'http://www.pypy.org',
+    'http://www.python.org',
+    'http://www.twitter.com',
+    'https://www.yahoo.com/'
+]
+
+
+def site_size(url: str) -> Tuple[str, int]:
+    """
+    Returns the page size of the given URL.
+    :param url: str
+    :return: tuple(str, int)
+    """
+    response = requests.get(url)
+    # Note that since we want to use Pool.imap_unordered() function, even though
+    # we know the order of the input URLs, the order of the results is
+    # arbitrary, so we need to return the input URL as well to know which input
+    # URL corresponds to which result
+    return url, len(response.content)
 
 
 def write(q: Queue) -> None:
@@ -77,7 +106,9 @@ def main():
     # Running child process 'test' (16624)
     # Child process ends.
 
-    # Create many subprocesses using Pool
+    # Create many subprocesses using Pool...
+
+    # with Pool.apply_async() function
     print(f'Parent process {os.getpid()}')
     pool = Pool(4)  # 开启4个进程
     for i in range(5):  # 设置5个任务
@@ -104,6 +135,21 @@ def main():
     # All subprocesses done
     # (注意由于只开启了4个进程, 却有5个任务, 则task 4只能等待某个进程处理完其任务之后才能在该
     # 进程上执行)
+
+    # with Pool.imap_unordered() function
+    pool = Pool(5)
+    for result in pool.imap_unordered(site_size, sites):
+        print(result)
+
+    # Output:
+    # ('http://www.pypy.org', 5539)
+    # ('http://www.cisco.com', 81777)
+    # ('http://www.cnn.com', 1724737)
+    # ('http://www.python.org', 50131)
+    # ('http://www.facebook.com', 554929)
+    # ('http://www.jpython.org', 19210)
+    # ('http://www.twitter.com', 232134)
+    # ('https://www.yahoo.com/', 521603)
 
     # Create non-self-defined subprocesses using subprocess module
     print('$ nslookup www.python.org')
