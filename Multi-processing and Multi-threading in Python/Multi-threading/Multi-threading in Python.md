@@ -163,8 +163,11 @@
       return len(response.content)
   
   
+  # Create a thread pool with 10 threads
   with cf.ThreadPoolExecutor(max_workers=10) as pool:
+      # Prepare Future objects to be executed
       future_to_url = {pool.submit(site_size, url): url for url in sites}
+      # Execute each Future object and get the result
       for future in cf.as_completed(future_to_url.keys()):
           url = future_to_url[future]
           try:
