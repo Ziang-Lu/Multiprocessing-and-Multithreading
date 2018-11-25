@@ -85,3 +85,27 @@ for worker_thread in worker_threads:
 # Lock on the print()-access lock
 with print_lock:
     print('Finishing up')
+
+# Output:
+# Starting up
+# The counter value is 1
+# ----------
+# The counter value is 2
+# ----------
+# The counter value is 3
+# ----------
+# The counter value is 4
+# ----------
+# The counter value is 5
+# ----------
+# The counter value is 6
+# ----------
+# The counter value is 7
+# ----------
+# The counter value is 8
+# ----------
+# The counter value is 9
+# ----------
+# The counter value is 10
+# ----------
+# Finishing up

@@ -17,13 +17,13 @@ product = None  # 商品
 condition = Condition()
 
 
-def produce() -> None:
+def producer() -> None:
     if condition.acquire():  # 1. 成功获得锁定   [等待池: 空, 锁定池: 空, 已锁定: P]
         while True:
             global product
             if not product:
                 # 生产商品
-                print('Producing...')
+                print('Producing something...')
                 product = 'anything'
                 # 通知消费者, 商品已生产
                 # 2. 由于等待池为空, 并没有通知任何线程, 且不会释放锁   [等待池: 空, 锁定池: C, 已锁定: P]
@@ -37,14 +37,14 @@ def produce() -> None:
         time.sleep(2)
 
 
-def consume() -> None:
+def consumer() -> None:
     if condition.acquire():  # 1. 尝试获得锁定, 同步阻塞在锁定池中   [等待池: 空, 锁定池: C, 已锁定: P]
                              # 3. 由于P释放了锁, 成功获得锁定   [等待池: P, 锁定池: 空, 已锁定: C]
         while True:
             global product
             if product:
                 # 消耗商品
-                print('Consuming...')
+                print('Consuming something...')
                 product = None
                 # 通知生产者, 商品已消耗
                 # 4. 通知P, P自动调用acquire()来尝试获得锁定(进入锁定池), 但当前线程不会释放锁   [等待池: 空, 锁定池: P, 已锁定: C]
@@ -56,17 +56,17 @@ def consume() -> None:
         time.sleep(2)
 
 
-# prod_thread = Thread(target=produce)
-# cons_thread = Thread(target=consume)
+# prod_thread = Thread(target=producer)
+# cons_thread = Thread(target=consumer)
 # prod_thread.start()
 # cons_thread.start()
 
 
 # Output:
-# Producing...
-# Consuming...
-# Producing...
-# Consuming...
+# Producing something...
+# Consuming something...
+# Producing something...
+# Consuming something...
 # ...
 
 

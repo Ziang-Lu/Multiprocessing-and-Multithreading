@@ -7,8 +7,6 @@
   ```java
   /**
    * Self-defined class that implements Runnable interface.
-   *
-   * @author Ziang Lu
    */
   class DisplayMessage implements Runnable {
       /**
@@ -86,8 +84,6 @@
   ```java
   /**
    * Self-defined class that extends Thread class.
-   *
-   * @author Ziang Lu
    */
   class GuessANumber extends Thread {
       /**
@@ -151,7 +147,114 @@
       }
   
   }
+  ```
+
+* Use `ExecutorService` class to create a <u>pool</u> of threads
+
+  ```java
+  import java.util.Random;
+  import java.util.concurrent.ExecutorService;
+  import java.util.concurrent.Executors;
+  import java.util.concurrent.TimeUnit;
   
+  /**
+   * Self-defined class that implements Runnable interface.
+   */
+  class Task implements Runnable {
+      /**
+       * Task ID.
+       */
+      private int id;
+      /**
+       * Random number generator to use.
+       */
+      private Random random;
+  
+      /**
+       * Constructor with parameter.
+       * @param id task ID
+       */
+      Task(int id) {
+          this.id = id;
+          random = new Random();
+      }
+  
+      @Override
+      public void run() {
+          System.out.println("Starting task-" + id);
+          // To simulate the task execution, sleep a random period between 1~5 seconds
+          try {
+              Thread.sleep((random.nextInt(4) + 1) * 1000);
+          } catch (InterruptedException e) {
+              e.printStackTrace();
+          }
+          System.out.println("Completed task-" + id);
+      }
+  }
+  
+  /**
+   * Simple demo for creating and using a thread pool.
+   *
+   * @author Ziang Lu
+   */
+  public class ThreadPoolDemo {
+  
+      /**
+       * Main driver.
+       * @param args arguments from command line
+       */
+      public static void main(String[] args) {
+          // Create a thread pool with 3 threads
+          ExecutorService pool = Executors.newFixedThreadPool(3);
+          // Submit tasks for execution
+          for (int i = 0; i < 5; ++i) {
+              pool.submit(new Task(i));
+          }
+          // We need to call shutdown() to indicate to the executor service (thread pool) that no more tasks are allowed
+          // to be submitted.
+          // If we don't call shutdown(), the program will never end, since the executor service (thread pool) keeps
+          // waiting for more tasks to be submitted.
+          pool.shutdown();
+          // After calling shutdown(), no more tasks are allowed to be submitted; when all the submitted tasks finished
+          // execution, this executor service (thread pool) is terminated.
+          System.out.println("All tasks submitted and the executor service (thread pool) is shut down.");
+  
+          // Check: After calling shutdown(), submitting a new task throws a RejectedExecutionException
+  //        pool.submit(new Task(5));
+  
+          // Wait up to 60 seconds for all the submitted tasks to finish execution
+          System.out.println("Waiting for all tasks to finish execution...");
+          try {
+              pool.awaitTermination(60, TimeUnit.SECONDS); // Block until all the submitted tasks finish execution
+          } catch (InterruptedException e) {
+              e.printStackTrace();
+              pool.shutdownNow();
+              // This will force the executor service (thread pool) to shut down and terminate, by attempting to stop the
+              // executing tasks, and prevent waiting tasks from starting.
+          }
+          // Upon termination, the executor service has no tasks actively executing, no tasks currently awaiting
+          // execution, and no new tasks are allowed to be submitted
+          System.out.println("All tasks completed.");
+  
+          /*
+           * Output:
+           * All tasks submitted and the executor service (thread pool) is shut down.
+           * Waiting for all tasks to finish execution...
+           * Starting task-2
+           * Starting task-1
+           * Starting task-0
+           * Completed task-2
+           * Completed task-0
+           * Starting task-4
+           * Starting task-3
+           * Completed task-1
+           * Completed task-3
+           * Completed task-4
+           * All tasks completed.
+           */
+      }
+  
+  }
   ```
 
 <br>
