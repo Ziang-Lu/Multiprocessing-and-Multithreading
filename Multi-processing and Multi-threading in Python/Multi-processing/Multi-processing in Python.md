@@ -79,33 +79,6 @@
           print(f"Task '{name}' runs {end - start:.2f} seconds.")
       
       
-      sites = [
-          'http://www.cisco.com',
-          'http://www.cnn.com',
-          'http://www.facebook.com',
-          'http://www.jpython.org',
-          'http://www.pypy.org',
-          'http://www.python.org',
-          'http://www.twitter.com',
-          'https://www.yahoo.com/'
-      ]
-      
-      
-      def site_size(url: str) -> Tuple[str, int]:
-          """
-          Returns the page size in bytes of the given URL.
-          :param url: str
-          :return: tuple(str, int)
-          """
-          response = requests.get(url)
-          # Note that since we want to use Pool.imap_unordered() method, even though
-          # we know the order of the input URLs, the order of the results is
-          # arbitrary, so we need to return the input URL as well to know which input
-          # URL corresponds to which result
-          return url, len(response.content)
-      
-      
-      
       # with Pool.apply_async() method
       print(f'Parent process {os.getpid()}')
       pool = Pool(4)  # 开启4个进程
@@ -131,6 +104,33 @@
       # Task '1' runs 2.58 seconds.
       # Task '0' runs 2.97 seconds.
       # All subprocesses done.
+      
+      
+      sites = [
+          'http://www.cisco.com',
+          'http://www.cnn.com',
+          'http://www.facebook.com',
+          'http://www.jpython.org',
+          'http://www.pypy.org',
+          'http://www.python.org',
+          'http://www.twitter.com',
+          'https://www.yahoo.com/'
+      ]
+      
+      
+      def site_size(url: str) -> Tuple[str, int]:
+          """
+          Returns the page size in bytes of the given URL.
+          :param url: str
+          :return: tuple(str, int)
+          """
+          response = requests.get(url)
+          # Note that since we want to use Pool.imap_unordered() method, even though
+          # we know the order of the input URLs, the order of the results is
+          # arbitrary, so we need to return the input URL as well to know which input
+          # URL corresponds to which result
+          return url, len(response.content)
+      
       
       # with Pool.imap_unordered() method
       pool = Pool(5)

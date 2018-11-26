@@ -26,29 +26,6 @@
         print(f'Thread {th_name} ends.')
     
     
-    def process_thread(local_: local, std_name: str) -> None:
-        """
-        Processes a thread and put the student of the current thread to the
-        ThreadLocal.
-        :param local_: local
-        :param std_name: str
-        :return: None
-        """
-        local_.student = std_name  # 在ThreadLocal中绑定当前thread对应的student
-        greet_student(local_)
-    
-    
-    def greet_student(local_: local) -> None:
-        """
-        Greets the student of the current thread.
-        :param local_: local
-        :return:
-        """
-        student = local_.student  # 从ThreadLocal中获取当前thread关联的student
-        th_name = current_thread().name
-        print(f'Hello, {student} (in {th_name})')
-    
-    
     th_name = current_thread().name
     print(f'Running thread {th_name}...')
     th = Thread(target=loop, name='LoopThread')
@@ -66,6 +43,30 @@
     # thread LoopThread >>> 4
     # Thread LoopThread ends.
     # Thread MainThread ends.
+    
+    
+    def process_thread(local_: local, student_name: str) -> None:
+        """
+        Processes a thread and put the student of the current thread to the
+        ThreadLocal.
+        :param local_: local
+        :param student_name: str
+        :return: None
+        """
+        local_.student = student_name  # 在ThreadLocal中绑定当前thread对应的student
+        _greet_student(local_)
+    
+    
+    def _greet_student(local_: local) -> None:
+        """
+        Greets the student of the current thread.
+        :param local_: local
+        :return:
+        """
+        student = local_.student  # 从ThreadLocal中获取当前thread关联的student
+        th_name = current_thread().name
+        print(f'Hello, {student} (in {th_name})')
+    
     
     # Use threading.ThreadLocal to encapsulate data in each thread
     # ThreadLocal可以看做一个{thread: thread属性dict}的dict, 用于管理thread内部的数据
