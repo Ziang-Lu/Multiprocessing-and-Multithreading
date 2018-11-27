@@ -28,14 +28,32 @@ A program attempts to do some parallel operations at the same time, but requires
 
    Only one operation can access the shared resource at the same time. During the period of access, no other operations can read or change its value.
 
-#### 1. Solution with (Atomic) Message Queue
+#### 1. Solution with Immutable Objects
+
+Check out this design pattern: <a href="https://github.com/Ziang-Lu/Design-Patterns/blob/master/5-Concurrency%20Patterns/2-Immutable-Object%20Pattern.md">Immutable Object Pattern</a> for more details
+
+<u>Since a class must have a lot of restrictions to be immutable, this solution is not very feasible in many practical cases.</u>
+
+#### 2. Solution with Atomic Operations & Classes
+
+**Atomic operations are performed in a single unit of task, without interference from other operations.**
+
+e.g., Java `AtomicInteger`, `Random`, `ConcurrentHashMap`, `ConcurrentHashSet`, and the following (atomic) blocking queue interface and implementations
+
+***
+
+Solution with **(Atomic) Message Queue**
 
 1. (对应于上面的1) Each shared resource shall be accessed in exactly its own thread.
-2. (对应于上面的2) All communications with that thread shall be done using an atomic message queue (`queue.Queue` class in Python).
+2. (对应于上面的2) All communications with that thread shall be done using an atomic message queue
+   * Java: `BlockingQueue` interface, with `ArrayBlockingQueue`, `LinkedBlockingQueue` and `PriorityBlockingQueue` impelementations
+   * Python: `queue.Queue` and `queue.PriorityQueue` classes
 
-=> Check out `Multi-processsing and Multi-threading in Python Examples/Multi-threading/race_condition_demo/comm_via_atomic_message_queue.py`
+***
 
-#### 2. Solution with Locks
+#### 3. Solution with Locks
+
+Note that <u>many solutions above</u>, like Atomic Operations & Classes and (Atomic) Message Queue, <u>have built-in locks in their implementations</u>, so  <u>using locks explicitly is considered a low-level synchronization operation</u> and should be avoided
 
 <br>
 

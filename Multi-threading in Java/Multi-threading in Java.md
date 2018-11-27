@@ -338,12 +338,6 @@ public void sync() {
 }
 ```
 
-------
-
-For better capabilities to <u>monitor the lock status</u>, check out Java `ReentrantLock`: https://docs.oracle.com/javase/10/docs/api/java/util/concurrent/locks/ReentrantLock.html
-
-------
-
 <br>
 
 ## Thread-safety in Java Libraries
@@ -358,7 +352,7 @@ There are five levels thread-safety in Java library:
 
    These objects are mutable, but have implemented sufficient "internal synchronization", which means that locking has already been designed and implemented by Java standard library developers, and we do not need to synchronize by ourselves manually. Thus, we can safely use them.
 
-   e.g., `AtomicInteger`, `Random`,` ConcurrentHashMap`, `ConcurrentHashSet`, `BlockingQueue`, `PriorityBlockingQueue`...
+   e.g., `AtomicInteger`, `Random`, ` ConcurrentHashMap`, `ConcurrentHashSet`, `BlockingQueue`, `PriorityBlockingQueue`...
 
    ```java
    ConcurrentHashSet<String> set = new ConcurrentHashSet<String>();
