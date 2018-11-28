@@ -8,7 +8,7 @@
 
     ```python
     import time
-    from threading import Thread, current_thread
+    from threading import Thread, current_thread, local
     
     
     def loop() -> None:
@@ -26,12 +26,12 @@
         print(f'Thread {th_name} ends.')
     
     
-    main_thread_name = current_thread().name
-    print(f'Running thread {main_thread_name}...')
+    th_name = current_thread().name
+    print(f'Running thread {th_name}...')
     th = Thread(target=loop, name='LoopThread')
     th.start()
     th.join()
-    print(f'Thread {main_thread_name} ends.')
+    print(f'Thread {th_name} ends.')
     print()
     
     # Output:
@@ -43,6 +43,45 @@
     # thread LoopThread >>> 4
     # Thread LoopThread ends.
     # Thread MainThread ends.
+    
+    
+    def process_thread(student_name: str) -> None:
+        """
+        Processes a thread and put the student of the current thread to the
+        ThreadLocal.
+        :param student_name: str
+        :return: None
+        """
+        thread_local.student = student_name  # 在ThreadLocal中绑定当前thread对应的student
+        _greet_student()
+    
+    
+    def _greet_student() -> None:
+        """
+        Greets the student of the current thread.
+        :return:
+        """
+        student = thread_local.student  # 从ThreadLocal中获取当前thread关联的student
+        th_name = current_thread().name
+        print(f'Hello, {student} (in {th_name})')
+    
+    
+    # Use threading.ThreadLocal to encapsulate data in each thread
+    # ThreadLocal可以看做一个{thread: thread属性dict}的dict, 用于管理thread内部的数据
+    # ThreadLocal封装了使用thread作为key检索对应的属性dict, 再使用属性名作为key检索属性值的细节
+    thread_local = local()
+    th_a = Thread(target=process_thread, args=(thread_local, 'Alice'),
+                  name='Thread-A')
+    th_b = Thread(target=process_thread, args=(thread_local, 'Bob'),
+                  name='Thread-B')
+    th_a.start()
+    th_b.start()
+    th_a.join()
+    th_b.join()
+    
+    # Output:
+    # Hello, Alice (in Thread-A)
+    # Hello, Bob (in Thread-B)
     
     
     # 注意:
