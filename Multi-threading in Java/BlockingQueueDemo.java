@@ -58,6 +58,10 @@ class Consumer implements Runnable {
      */
     private final BlockingQueue<String> queue;
 
+    /**
+     * Constructor with parameter.
+     * @param queue atomic message queue to use
+     */
     Consumer(BlockingQueue<String> queue) {
         random = new Random();
         this.queue = queue;

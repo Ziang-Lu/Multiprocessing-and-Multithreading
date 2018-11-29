@@ -58,12 +58,11 @@
     
     def _greet_student() -> None:
         """
-        Greets the student of the current thread.
-        :return:
+        Private helper function to greet the student of the current thread.
+        :return: None
         """
         student = thread_local.student  # 从ThreadLocal中获取当前thread关联的student
-        th_name = current_thread().name
-        print(f'Hello, {student} (in {th_name})')
+        print(f'Hello, {student} (in {current_thread().name})')
     
     
     # Use threading.ThreadLocal to encapsulate data in each thread

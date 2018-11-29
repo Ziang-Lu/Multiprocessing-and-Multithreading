@@ -16,7 +16,7 @@ A program attempts to do some parallel operations at the same time, but requires
 
 => Check out `Multi-processsing and Multi-threading in Python Examples/Multi-threading/race_condition_demo/race_condition.py`
 
-### Away with Race Conditions:
+### Away with Race Conditions: (-> Thread-Safe)
 
 1. Ensure an explicit ordering of the operations (on the shared resources)
 
@@ -34,7 +34,7 @@ Check out this design pattern: <a href="https://github.com/Ziang-Lu/Design-Patte
 
 <u>Since a class must have a lot of restrictions to be immutable, this solution is not very feasible in many practical cases.</u>
 
-#### 2. Solution with Atomic Operations & Classes
+#### 2. Solution with Atomic Operations & Classes ***
 
 **Atomic operations are performed in a single unit of task, without interference from other operations.**
 
@@ -42,7 +42,7 @@ e.g., Java `AtomicInteger`, `Random`, `ConcurrentHashMap`, `ConcurrentHashSet`, 
 
 ***
 
-Solution with **(Atomic) Message Queue**
+Solution with **(Atomic) Message Queue** ***
 
 1. (对应于上面的1) Each shared resource shall be accessed in exactly its own thread.
 2. (对应于上面的2) All communications with that thread shall be done using an atomic message queue
@@ -51,7 +51,7 @@ Solution with **(Atomic) Message Queue**
 
 ***
 
-#### 3. Solution with Locks
+#### 3. Solution with Locks ***
 
 Note that <u>many solutions above</u>, like Atomic Operations & Classes and (Atomic) Message Queue, <u>have built-in locks in their implementations</u>, so  <u>using locks explicitly is considered a low-level synchronization operation</u> and should be avoided
 
