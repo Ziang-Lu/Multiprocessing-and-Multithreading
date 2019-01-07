@@ -1,9 +1,19 @@
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * Self-defined class that implements Runnable interface.
+ */
 class Processing implements Runnable {
+    /**
+     * Number of processed tasks.
+     */
 //    private int processedCount = 0;
     private AtomicInteger processedCount = new AtomicInteger();
 
+    /**
+     * Accessor of processedCount.
+     * @return processedCount
+     */
     int getProcessedCount() {
 //        return processedCount;
         return processedCount.get();
@@ -25,6 +35,10 @@ class Processing implements Runnable {
         }
     }
 
+    /**
+     * Private helper method to process some task.
+     * @param i task-i
+     */
     private void processSomeTask(int i) {
         try {
             Thread.sleep(i * 1000);
