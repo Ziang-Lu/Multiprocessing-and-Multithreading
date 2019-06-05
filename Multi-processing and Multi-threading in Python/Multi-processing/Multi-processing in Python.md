@@ -201,7 +201,71 @@
 
 <br>
 
-For communication between processes:
+## Communication between Processes
+
+```python
+import random
+import time
+from multiprocessing import Process, Queue
+from typing import List
+
+
+def write_process(q: Queue, urls: List[str]) -> None:
+    """
+    Process to write data to the given message queue.
+    :param q: Queue
+    :param urls: list[str]
+    :return: None
+    """
+    print('Process starts writing...')
+    for url in urls:
+        q.put(url)
+        print(f'Put {url} to the queue [Write Process]')
+        time.sleep(random.random())
+
+
+def read_process(q: Queue) -> None:
+    """
+    Process to get data from the given message queue.
+    :param q: Queue
+    :return: None
+    """
+    print('Process starts reading...')
+    while True:
+        url = q.get(block=True)
+        print(f'Get {url} from the queue [Read Process]')
+
+
+q = Queue()
+writer1 = Process(target=write_process, args=(q, ['url1', 'url2', 'url3']))
+writer2 = Process(target=write_process, args=(q, ['url4', 'url5']))
+reader = Process(target=read_process, args=(q,))
+
+writer1.start()
+writer2.start()
+reader.start()
+
+writer1.join()
+writer2.join()
+
+# Since there is an infinite loop in read_process, we need to manually force it
+# to stop.
+reader.terminate()
+
+# Output:
+# Process starts writing...
+# Put url1 to the queue [Write Process]
+# Put url4 to the queue [Write Process]
+# Process starts reading...
+# Get url1 from the queue [Read Process]
+# Get url4 from the queue [Read Process]
+# Put url5 to the queue [Write Process]
+# Get url5 from the queue [Read Process]
+# Put url2 to the queue [Write Process]
+# Get url2 from the queue [Read Process]
+# Put url3 to the queue [Write Process]
+# Get url3 from the queue [Read Process]
+```
 
 - Don't make too many trips back and forth
 
