@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Simply demo of race condition, amplified by fuzzing technique.
+Simple demo of race condition, amplified by fuzzing technique.
 """
 
 import random
