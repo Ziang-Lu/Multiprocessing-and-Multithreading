@@ -32,7 +32,7 @@
     
     def run_process(name: str) -> None:
         """
-        Dummy task to be run within a process
+        Dummy task to be run within a process.
         :param name: str
         :return: None
         """
@@ -70,7 +70,7 @@
           """
           Dummy long task to be run within a process.
           :param name: str
-          :return: Nones
+          :return: None
           """
           print(f"Running task '{name}' ({os.getpid()})...")
           start = time.time()

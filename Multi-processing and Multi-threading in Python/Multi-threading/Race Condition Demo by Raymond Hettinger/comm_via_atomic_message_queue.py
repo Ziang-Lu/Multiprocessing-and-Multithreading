@@ -37,7 +37,7 @@ def fuzz() -> None:
     Fuzzes the program for a random amount of time, if instructed.
     :return: None
     """
-    if fuzz:
+    if FUZZ:
         time.sleep(random.random())
 
 
@@ -45,8 +45,8 @@ def fuzz() -> None:
 
 # Note that the built-in print() function is a "global" resource, and thus could
 # lead to race condition
-# Therefore, as instructed above, accessing the print() function should be
-# handled in exactly its own thread, which should be a daemon thread. (=> 1)
+# Therefore, as instructed above, accessing print() function should be handled
+# in exactly its own thread, which should be a daemon thread. (=> 1)
 
 # All communications with the print()-access daemon thread shall be done using
 # an atomic message queue. (=> 2)
@@ -56,7 +56,7 @@ print_queue = Queue()  # Atomic message queue used for the print()-access daemon
 def print_manager() -> None:
     """
     Daemon thread function that uses an atomic message queue to communicate with
-    the external world, and has exclusive right to access the print() function.
+    the external world, and has exclusive right to access print() function.
     :return: None
     """
     while True:

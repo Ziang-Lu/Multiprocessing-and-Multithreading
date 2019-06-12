@@ -176,7 +176,7 @@ Condition(lock=None)
 
 - `notify_all()`   *(使用前当前thread必须已获得锁定, 否则将抛出异常)*
 
-  通知Condition的等待池中的全部thread, 收到通知的全部thread将自动调用acquire()来尝试获得锁定 (进入锁定吃), 但当前thread不会释放锁
+  通知Condition的等待池中的全部thread, 收到通知的全部thread将自动调用acquire()来尝试获得锁定 (进入锁定池), 但当前thread不会释放锁
 
 <br>
 

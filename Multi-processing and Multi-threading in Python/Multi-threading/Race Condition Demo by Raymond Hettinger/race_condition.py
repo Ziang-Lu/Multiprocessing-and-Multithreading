@@ -6,8 +6,8 @@ Simple demo of race condition, amplified by fuzzing technique.
 """
 
 import random
-import threading
 import time
+from threading import Thread
 
 # Fizzing is a technique for amplifying race condition to make them more
 # visible.
@@ -55,6 +55,6 @@ def worker() -> None:
 
 print('Starting up')
 for _ in range(10):
-    threading.Thread(target=worker).start()
+    Thread(target=worker).start()
     fuzz()
 print('Finishing up')

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Test module to implement wait blocking, to address race condition, using
+Test module to implement wait blocking to address race condition, using
 threading.Condition and threading.Event.
 """
 
@@ -18,8 +18,8 @@ condition = Condition()
 
 
 def producer() -> None:
-    if condition.acquire():  # 1. 成功获得锁定   [等待池: 空, 锁定池: 空, 已锁定: P]
-        while True:
+    while True:
+        if condition.acquire():  # 1. 成功获得锁定   [等待池: 空, 锁定池: 空, 已锁定: P]
             global product
             if not product:
                 # 生产商品
@@ -30,17 +30,18 @@ def producer() -> None:
                 condition.notify()
                 # 6. 通知C, C自动调用acquire()来尝试获得锁定(进入锁定池), 但当前线程不会释放锁   [等待池: 空, 锁定池: C, 已锁定: P]
 
-        condition.wait()  # 3. 当前线程进入等待池, 并释放锁   [等待池: P, 锁定池: C, 已锁定: 空]
-        # 4. 接到通知, 自动调用acquire()来尝试获得锁定(进入锁定池)   [等待池: 空, 锁定池: P, 已锁定: C]
-        # 5. 由于C释放了锁, 成功获得锁定   [等待池: C, 锁定池: 空, 已锁定: P]
-        # 7 -> 3
-        time.sleep(2)
+            condition.wait()  # 3. 当前线程进入等待池, 并释放锁   [等待池: P, 锁定池: C, 已锁定: 空]
+            # 4. 接到通知, 自动调用acquire()来尝试获得锁定(进入锁定池)   [等待池: 空, 锁定池: P, 已锁定: C]
+            # 5. 由于C释放了锁, 成功获得锁定   [等待池: C, 锁定池: 空, 已锁定: P]
+            # 7 -> 3
+            time.sleep(2)
 
 
 def consumer() -> None:
-    if condition.acquire():  # 1. 尝试获得锁定, 同步阻塞在锁定池中   [等待池: 空, 锁定池: C, 已锁定: P]
-                             # 3. 由于P释放了锁, 成功获得锁定   [等待池: P, 锁定池: 空, 已锁定: C]
-        while True:
+    while True:
+        # 1. 尝试获得锁定, 同步阻塞在锁定池中   [等待池: 空, 锁定池: C, 已锁定: P]
+        if condition.acquire():
+                                 # 3. 由于P释放了锁, 成功获得锁定   [等待池: P, 锁定池: 空, 已锁定: C]
             global product
             if product:
                 # 消耗商品
@@ -50,16 +51,16 @@ def consumer() -> None:
                 # 4. 通知P, P自动调用acquire()来尝试获得锁定(进入锁定池), 但当前线程不会释放锁   [等待池: 空, 锁定池: P, 已锁定: C]
                 condition.notify()
 
-        condition.wait()  # 5. 当前线程进入等待池, 并释放锁   [等待池: C, 锁定池: P, 已锁定: 空]
-        # 6. 接到通知, 自动调用acquire()来尝试获得锁定(进入锁定池)   [等待池: 空, 锁定池: C, 已锁定: P]
-        # 7 -> 3
-        time.sleep(2)
+            condition.wait()  # 5. 当前线程进入等待池, 并释放锁   [等待池: C, 锁定池: P, 已锁定: 空]
+            # 6. 接到通知, 自动调用acquire()来尝试获得锁定(进入锁定池)   [等待池: 空, 锁定池: C, 已锁定: P]
+            # 7 -> 3
+            time.sleep(2)
 
 
-# prod_thread = Thread(target=producer)
-# cons_thread = Thread(target=consumer)
-# prod_thread.start()
-# cons_thread.start()
+prod_thread = Thread(target=producer)
+cons_thread = Thread(target=consumer)
+prod_thread.start()
+cons_thread.start()
 
 
 # Output:
@@ -84,7 +85,7 @@ def print_list() -> None:
     if condition.acquire():  # 1. 成功获得锁定   [等待池: 空, 锁定池: 空, 已锁定: P]
         global L
         while not L:
-            condition.wait()  # 2. 当前进程进入等待池, 并释放锁   [等待池: P, 锁定池: S C, 已锁定: 空]
+            condition.wait()  # 2. 当前线程进入等待池, 并释放锁   [等待池: P, 锁定池: S C, 已锁定: 空]
             # 4. 接到通知, 自动调用acquire()来尝试获得锁定(进入锁定池)   [等待池: 空, 锁定池: P S, 已锁定: C]
             # 5. 由于C释放了锁, 成功获得锁定   [等待池: 空, 锁定池: S, 已锁定: P]
         for i in L:
