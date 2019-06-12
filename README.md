@@ -1,3 +1,5 @@
+This repo contains multi-threading related stuff in Java and Python, and multi-processing related stuff in Python.
+
 # Multi-threading
 
 ## Thread Safety
