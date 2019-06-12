@@ -10,8 +10,8 @@ public class BankUserMultiThreaded {
      * Min-heap for the deposit/withdraw operation timestamps.
      *
      * In order to ensure an explicit ordering of the deposit/withdraw
-     * operations, i.e., all the operations must be executed in the same order
-     * they are received:
+     * operations, i.e., all the operations must be executed in the order they
+     * are received:
      * we create a min-heap of the timestamps of the deposit/withdraw operation.
      */
     private static final PriorityQueue<Long> operations = new PriorityQueue<>();
@@ -36,7 +36,7 @@ public class BankUserMultiThreaded {
 
                 // No need to do authentication
                 balance += amt;
-                System.out.println("Deposit " + amt + " to funds. Now at " + balance);
+                System.out.println(String.format("Deposit %d to funds. Not at %d", amt, balance));
 
                 // 完成operation, 并释放operations的monitor
                 releaseLock();
@@ -54,7 +54,7 @@ public class BankUserMultiThreaded {
     }
 
     /**
-     * Private helper method to for the given operation timestamp's thread to
+     * Private helper method for the given operation timestamp's thread to
      * acquire operations's monitor.
      * @param timestamp given operation timestamp
      */
@@ -123,14 +123,15 @@ public class BankUserMultiThreaded {
                     return;
                 }
                 if (holdings < amt) {
-                    System.out.println("Overdraft Error: You have insufficient funds for this withdrawal. Balance = "
-                            + holdings + ". Amt = " + amt);
+                    System.out.println(String.format(
+                        "Overdraft Error: insufficient funds for this withdrawl. Balance = %d. Amt = %d", holdings, amt
+                    ));
                     // 完成操作, 并释放operations的monitor
                     releaseLock();
                     return;
                 }
                 balance = holdings - amt;
-                System.out.println("Withdraw " + amt + " from funds. Now at " + balance);
+                System.out.println(String.format("Withdraw %d from funds. Now at %d", amt, balance));
 
                 // 完成操作, 并释放operations的monitor
                 releaseLock();

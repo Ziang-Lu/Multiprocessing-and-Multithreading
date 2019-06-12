@@ -31,7 +31,7 @@ class Processing implements Runnable {
 
             // Correct implementation: Use AtomicInteger
             processedCount.incrementAndGet();
-            // AtomicInteger increment is atomic
+            // AtomicInteger increment is atomic.
         }
     }
 

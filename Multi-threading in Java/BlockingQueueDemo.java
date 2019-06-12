@@ -32,7 +32,7 @@ class Producer implements Runnable {
             for (int i = 0; i < 5; ++i) {
                 // Simulate the producing process by sleeping for 1~3 seconds
                 Thread.sleep((random.nextInt(2)  + 1) * 1000);
-                String msg = "Message-" + i;
+                String msg = String.format("Message-%d", i);
                 queue.put(msg);
                 System.out.println("Producer put " + msg + " into the queue");
             }

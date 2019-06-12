@@ -263,7 +263,7 @@
 
 **In Java, every object has a unique internal lock.** When a method is declared as ``synchronized``, or a code snippet is enclosed by ``synchronized (this)`` block, that method or code snippet will be protected by an internal lock. When any thread wants to enter the method or the code snippet, it must first try to acquire the internal lock.
 
-This ensures that onlt one method can be executed on the object at any given point. Other methods can invoke the method or enter the code snippet, howerver they have to wait until the running thread releases the lock by exiting from the protected area or call wait() on the lock.
+This ensures that only one method can be executed on the object at any given point. Other methods can invoke the method or enter the code snippet, however they have to wait until the running thread releases the lock by exiting from the protected area or call wait() on the lock.
 
 **相当于每个Object自带一个锁 (被称为monitor), 即每个Object自带一个锁定池和等待池**
 
@@ -293,10 +293,10 @@ A thread can also wake up without being notified, interrupted, or timing out, a 
 
 ```java
 synchronized (obj) { // 执行synchronized block on obj, 获得obj的monitor
-  while (<condition does not hold>) {
-    obj.wait();
-  }
-  // Perform action appropriate to condition
+    while (<condition does not hold>) {
+        obj.wait();
+    }
+    // Perform action appropriate to condition
 }
 ```
 
@@ -309,14 +309,14 @@ A more common mistake is synchronizing on threads' own lock (``synchronized (thi
 ```java
 // Bad example
 public void uselessSync() {
-  new Thread(new Runnable() {
-    @Override
-    public void run() {
-      synchronized (this) { // Use the current thread's monitor as the lock, but not a global shared lock
-        // Do something
-      }
-    }
-  })
+    new Thread(new Runnable() {
+        @Override
+        public void run() {
+            synchronized (this) { // Use the current thread's monitor as the lock, but not a global shared lock
+                // Do something
+            }
+        }
+    })
 }
 ```
 
@@ -327,14 +327,14 @@ public void uselessSync() {
 private Object lock = new Object();
 
 public void sync() {
-  new Thread(new Runnable() {
-    @Override
-    public void run() {
-      synchronized (lock) { // Use a global shared lock
-        // Do something
-      }
-    }
-  })
+    new Thread(new Runnable() {
+        @Override
+        public void run() {
+            synchronized (lock) { // Use a global shared lock
+                // Do something
+            }
+        }
+    })
 }
 ```
 
@@ -358,7 +358,7 @@ There are five levels thread-safety in Java library:
    ConcurrentHashSet<String> set = new ConcurrentHashSet<String>();
    
    public void add(String s) {
-     set.add(s);
+       set.add(s);
    }
    ```
 
@@ -376,7 +376,7 @@ There are five levels thread-safety in Java library:
    HashSet<String> set = new HashSet<String>();
    
    public synchronized void add(String s) {
-     set.add(s);
+       set.add(s);
    }
    ```
 
