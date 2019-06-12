@@ -220,7 +220,7 @@
           System.out.println("All tasks submitted and the executor service (thread pool) is shut down.");
   
           // Check: After calling shutdown(), submitting a new task throws a RejectedExecutionException
-  //        pool.submit(new Task(5));
+          // pool.submit(new Task(5));
   
           // Wait up to 60 seconds for all the submitted tasks to finish execution
           System.out.println("Waiting for all tasks to finish execution...");
@@ -233,7 +233,7 @@
               // executing tasks, and prevent waiting tasks from starting.
           }
           // Upon termination, the executor service has no tasks actively executing, no tasks currently awaiting
-          // execution, and no new tasks are allowed to be submitted
+          // execution, and no new tasks are allowed to be submitted.
           System.out.println("All tasks completed.");
   
           /*
