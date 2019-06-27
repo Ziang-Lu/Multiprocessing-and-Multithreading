@@ -32,7 +32,7 @@ ServerQueueManager.register('get_result_queue', callable=lambda: result_queue)
 server_manager = ServerQueueManager(address=('', 5000), authkey=b'abc')
 # 启动manager
 server_manager.start()
-print('Manager started.')
+print('Server manager started.')
 # 通过ServerQueueManager封装来获取task_queue和result_queue
 task_q = server_manager.get_task_queue()
 result_q = server_manager.get_result_queue()
@@ -43,7 +43,7 @@ for _ in range(10):
     task_q.put(n)
 
 # Output:
-# Manager started.
+# Server manager started.
 # Put task 8739...
 # Put task 5790...
 # Put task 474...
@@ -64,7 +64,7 @@ for _ in range(10):
     print(f'Result: {r}')
 # 关闭manager
 server_manager.shutdown()
-print('Manager exited.')
+print('Server manager exited.')
 
 # Output:
 # Getting results...
@@ -78,4 +78,4 @@ print('Manager exited.')
 # Result: 7217 * 7217 = 52085089
 # Result: 6542 * 6542 = 42797764
 # Result: 2097 * 2097 = 4397409
-# Manager exited.
+# Server manager exited.
