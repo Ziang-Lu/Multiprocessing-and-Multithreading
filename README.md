@@ -75,6 +75,26 @@ Note that <u>many solutions above</u>, like Atomic Operations & Classes and (Ato
 
 <br>
 
+# Distributed Locking Mechanism (Using Redis)
+
+For a distributed scenario, we can <u>use the Redis's single-threaded feature</u> to
+
+- Implement a **naive** distributed lock
+
+  <u>Simple but imperfect</u>
+
+  => <u>In NOT so high-concurrent scenarios, this works just fine.</u>
+
+- Use a **third-party library**
+
+  <u>Complex but perfect</u>
+
+  => <u>Works for high-concurrent scenarios</u>
+
+  Check out `distributed_locking.py`
+
+<br>
+
 # License
 
 This repo is distributed under the <a href="https://github.com/Ziang-Lu/Multiprocessing-and-Multithreading/blob/master/LICENSE">MIT license</a>.
