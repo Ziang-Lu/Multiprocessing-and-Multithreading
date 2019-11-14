@@ -71,8 +71,9 @@ def print_manager() -> None:
 
 
 # Create and start the print()-access daemon thread
-print_daemon_thread = Thread(target=print_manager,
-                             name='print()-access Daemon Thread')
+print_daemon_thread = Thread(
+    target=print_manager, name='print()-access Daemon Thread'
+)
 print_daemon_thread.daemon = True
 print_daemon_thread.start()
 
@@ -107,15 +108,16 @@ def counter_manager() -> None:
         fuzz()
         # Send a message to the print()-access atomic message queue in order to
         # print the "counter" value
-        print_queue.put([f'The counter value is {counter}', '----------'])
+        print_queue.put([f'Counter value: {counter}', '----------'])
         fuzz()
         # Mark the task as done
         counter_queue.task_done()
 
 
 # Create and start the "counter"-access daemon thread
-counter_daemon_thread = Thread(target=counter_manager,
-                               name='Counter-access Daemon Thread')
+counter_daemon_thread = Thread(
+    target=counter_manager, name='Counter-access Daemon Thread'
+)
 counter_daemon_thread.daemon = True
 counter_daemon_thread.start()
 
@@ -147,14 +149,14 @@ for _ in range(10):
 for worker_thread in worker_threads:
     worker_thread.join()
     fuzz()
-# By now, it is guaranteed that 10 messages has been sent to the
+# By now, it is guaranteed that 10 messages have been sent to the
 # "counter"-access atomic message queue, but the tasks haven't necesserily been
 # done yet.
 
 # Note that since the "counter"-access queue is a daemon thread and never ends,
 # we cannot join it
 # Instead, we can join the atomic message queue itself, which waits until all
-# the tasks has been marked as done.
+# the tasks have been marked as done.
 counter_queue.join()
 
 print_queue.put(['Finishing up'])
@@ -162,24 +164,24 @@ print_queue.join()  # Same reason as above
 
 # Output:
 # Starting up
-# The counter value is 1
+# Counter value: 1
 # ----------
-# The counter value is 2
+# Counter value: 2
 # ----------
-# The counter value is 3
+# Counter value: 3
 # ----------
-# The counter value is 4
+# Counter value: 4
 # ----------
-# The counter value is 5
+# Counter value: 5
 # ----------
-# The counter value is 6
+# Counter value: 6
 # ----------
-# The counter value is 7
+# Counter value: 7
 # ----------
-# The counter value is 8
+# Counter value: 8
 # ----------
-# The counter value is 9
+# Counter value: 9
 # ----------
-# The counter value is 10
+# Counter value: 10
 # ----------
 # Finishing up

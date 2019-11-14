@@ -95,6 +95,20 @@ For a distributed scenario, we can <u>use the Redis's single-threaded feature</u
 
 <br>
 
+## Comparison between Multi-threading, Multi-processing, and Asynchronous IO in Python
+
+After studying asynchronous IO in Python, we are able to compare these three concurrent strategies:
+
+|                                         | Multi-processing                                             | Multi-threading                                              | Asynchronous IO                                              |
+| --------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| Use blocking standard library functions | **YES**                                                      | **YES**                                                      | NO                                                           |
+| Optimize waiting periods                | YES<br>Preemptive, because the OS handles subprocess scheduling | YES<br>Preemptive, because the OS handles thread scheduling  | YES<br>Cooperative, because the Python interpreter itself handles coroutine scheduling |
+| Use all CPU cores                       | **YES**<br>=> 可以把thread/coroutine包在subprocess之中, 达到充分利用多核CPU的目的 | NO                                                           | NO                                                           |
+| GIL interference                        | **NO**                                                       | Some<br>(对于IO密集型程序, 由于CPU可以在thread等待期间执行其他thread, NO)<br>(对于CPU计算密集型程序, YES) | **NO**                                                       |
+| Scalability<br>(本质上, 与开销有关)     | Low                                                          | Medium                                                       | **High**<br>=> 对于真正需要巨大scalability时, 才考虑使用async, 比如server需要处理大量requests时 |
+
+<br>
+
 # License
 
 This repo is distributed under the <a href="https://github.com/Ziang-Lu/Multiprocessing-and-Multithreading/blob/master/LICENSE">MIT license</a>.

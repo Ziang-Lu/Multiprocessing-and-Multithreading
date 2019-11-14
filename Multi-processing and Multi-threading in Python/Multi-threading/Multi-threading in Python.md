@@ -158,7 +158,7 @@
 
 **构造方法:**
 
-Condition(lock=None)
+`Condition(lock=None)`
 
 **实例方法:**
 
@@ -216,7 +216,5 @@ Condition(lock=None)
 
 <br>
 
-**结论: 多核下, 想做concurrent提升效率, 比较通用的方法是使用multi-processing, 能够有效提高执行效率**
-
-*每个process有各自独立的GIL, 互不干扰, 这样就可以真正意义上的parallel执行.*
+**结论: 多核下, 想做concurrent提升效率, 比较通用的方法是使用multi-processing, 能够有效提高执行效率** (每个process有各自独立的GIL, 互不干扰, 这样就可以真正意义上的parallel执行.)
 
