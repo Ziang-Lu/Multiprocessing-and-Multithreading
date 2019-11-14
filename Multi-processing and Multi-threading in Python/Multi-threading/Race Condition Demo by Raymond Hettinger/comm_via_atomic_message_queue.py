@@ -24,8 +24,8 @@ Specifically for solution with (atomic) message queue,
 
 import random
 import time
-from threading import Thread
 from queue import Queue
+from threading import Thread
 
 ##### Fuzzing technique #####
 
