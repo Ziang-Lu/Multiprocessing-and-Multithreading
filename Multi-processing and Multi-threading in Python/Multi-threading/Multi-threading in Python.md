@@ -139,7 +139,7 @@
               print(f'{url} page is {page_size} bytes.')
   
   # Output:
-  # http://some-made-up-domain.com/ page is 301 bytes.
+  # http://some-made-up-domain.com/ generated an exception: HTTPConnectionPool(host='some-made-up-domain.com', port=80): Max retries exceeded with url: / (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x109546c90>: Failed to establish a new connection: [Errno 8] nodename nor servname provided, or not known'))
   # http://www.foxnews.com/ page is 216594 bytes.
   # http://www.cnn.com/ page is 1725827 bytes.
   # http://europe.wsj.com/ page is 979035 bytes.
