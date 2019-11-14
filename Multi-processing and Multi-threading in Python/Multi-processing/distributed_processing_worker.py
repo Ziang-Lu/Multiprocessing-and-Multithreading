@@ -25,9 +25,10 @@ WorkerQueueManager.register('get_result_queue')
 server_addr = '127.0.0.1'
 # 创建manager, 端口和验证码注意与manager.py中保持一致
 worker_manager = WorkerQueueManager(
-    address=(server_addr, 5000), authkey=b'abc')
-print(f'Connecting to server {server_addr}...')
+    address=(server_addr, 5000), authkey=b'abc'
+)
 # 连接至服务器
+print(f'Connecting to server {server_addr}...')
 worker_manager.connect()
 print('Worker started.')
 # 通过WorkerQueueManager封装来获取task_queue和result_queue
