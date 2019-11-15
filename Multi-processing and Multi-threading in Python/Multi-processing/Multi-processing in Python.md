@@ -79,7 +79,7 @@
           print(f"Task '{name}' runs {end - start:.2f} seconds.")
       
       
-      # with Pool.apply_async() method
+      # With Pool.apply_async() method
       print(f'Parent process {os.getpid()}')
       pool = Pool(4)  # 开启4个进程
       for i in range(5):  # 设置5个任务
@@ -132,7 +132,7 @@
           return url, len(response.content)
       
       
-      # with Pool.imap_unordered() method
+      # With Pool.imap_unordered() method
       pool = Pool(5)
       for result in pool.imap_unordered(site_size, sites):
           print(result)
@@ -174,8 +174,12 @@
   # Non-self-defined subprocesses might need input
   print('$ nslookup')
   # 相当于在command line中输入 nslookup
-  p = subprocess.Popen(['nslookup'], stdin=subprocess.PIPE,
-                       stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+  p = subprocess.Popen(
+      ['nslookup'],
+      stdin=subprocess.PIPE,
+      stdout=subprocess.PIPE,
+      stderr=subprocess.PIPE
+  )
   output, _ = p.communicate(b'set q=mx\npython.org\nexit\n')
   # 相当于再在command line中输入
   # set q=mx
