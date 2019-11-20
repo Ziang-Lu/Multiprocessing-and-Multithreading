@@ -4,8 +4,10 @@
 """
 Distributed processing: distribute multiple processes to multiple machines.
 
-Task worker module.
+Task consumer module.
 """
+
+__author__ = 'Ziang Lu'
 
 import time
 from multiprocessing import Queue
@@ -20,10 +22,10 @@ class WorkerQueueManager(BaseManager):
 WorkerQueueManager.register('get_task_queue')
 WorkerQueueManager.register('get_result_queue')
 
-# Worker端
+##### WORKER-SIDE #####
 
-server_addr = '127.0.0.1'
-# 创建manager, 端口和验证码注意与manager.py中保持一致
+server_addr = '127.0.0.1'  # localhost
+# 创建manager, port和authkey注意与manager.py中保持一致
 worker_manager = WorkerQueueManager(
     address=(server_addr, 5000), authkey=b'abc'
 )
@@ -31,10 +33,12 @@ worker_manager = WorkerQueueManager(
 print(f'Connecting to server {server_addr}...')
 worker_manager.connect()
 print('Worker started.')
+
 # 通过WorkerQueueManager封装来获取task_queue和result_queue
-task_q = worker_manager.get_task_queue()
-result_q = worker_manager.get_result_queue()
-# 从task_queue获取任务, 执行任务, 并把结果写入result_queue
+task_q = worker_manager.get_task_queue()  # 本质上是个proxy
+result_q = worker_manager.get_result_queue()  # 本质上是个proxy
+
+# 从task_q获取任务, 执行任务, 并把结果写入result_q
 for _ in range(10):
     try:
         n = task_q.get(timeout=1)

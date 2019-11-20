@@ -4,7 +4,7 @@
 """
 Distributed processing: distribute multiple processes to multiple machines.
 
-Task manager module.
+Task server module.
 """
 
 __author__ = 'Ziang Lu'
@@ -26,17 +26,20 @@ class ServerQueueManager(BaseManager):
 ServerQueueManager.register('get_task_queue', callable=lambda: task_queue)
 ServerQueueManager.register('get_result_queue', callable=lambda: result_queue)
 
-# Server端
 
-# 创建manager, 并绑定端口5000, 设置验证码abc
+##### SERVER-SIDE #####
+
+# 创建manager, 并绑定端口5000, 设置authkey "abc"
 server_manager = ServerQueueManager(address=('', 5000), authkey=b'abc')
 # 启动manager
 server_manager.start()
 print('Server manager started.')
+
 # 通过ServerQueueManager封装来获取task_queue和result_queue
-task_q = server_manager.get_task_queue()
-result_q = server_manager.get_result_queue()
-# 设置任务
+task_q = server_manager.get_task_queue()  # 本质上是个proxy
+result_q = server_manager.get_result_queue()  # 本质上是个proxy
+
+# 向task_q设置任务
 for _ in range(10):
     n = random.randint(0, 10000)
     print(f'Put task {n}...')
@@ -62,6 +65,7 @@ for _ in range(10):
     # Will block here and wait for getting results
     r = result_q.get(timeout=10)
     print(f'Result: {r}')
+
 # 关闭manager
 server_manager.shutdown()
 print('Server manager exited.')

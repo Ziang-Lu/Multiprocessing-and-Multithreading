@@ -8,4 +8,4 @@ __pycache__/
 *.pyc
 
 # Project files
-.vscode
+.vscode/
