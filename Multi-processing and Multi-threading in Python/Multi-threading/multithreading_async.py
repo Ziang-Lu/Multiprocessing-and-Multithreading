@@ -33,7 +33,11 @@ def site_size(url: str) -> int:
 # Create a thread pool with 10 threads
 with cf.ThreadPoolExecutor(max_workers=10) as pool:
     # Submit tasks for execution
-    future_to_url = {pool.submit(site_size, url): url for url in sites}
+    future_to_url = {pool.submit(site_size, url): url for url in sites}  # Will NOT block here
+
+    # Since submit() method is asynchronous (non-blocking), by now the tasks in
+    # the thread pool are still executing, but in this main thread, we have
+    # successfully proceeded to here.
     # Wait until all the submitted tasks have been completed
     for future in cf.as_completed(future_to_url):
         url = future_to_url[future]
