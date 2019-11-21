@@ -2,8 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Multiprocessing module (especially, process pool) can work asynchronously, i.e.,
-we can assign asynchronous tasks into a process pool.
+We can assign asynchronous tasks into a process pool.
 """
 
 __author__ = 'Ziang Lu'
