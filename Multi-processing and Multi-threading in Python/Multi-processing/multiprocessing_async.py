@@ -4,8 +4,9 @@
 """
 We can assign asynchronous tasks into a process pool.
 
-This can implemented in two ways: one with "concurrent.futures" module, and the
-other one with "multiprocessing" module,
+This can implemented in two ways:
+- one with "concurrent.futures" module
+- one with "multiprocessing" module
 """
 
 __author__ = 'Ziang Lu'
