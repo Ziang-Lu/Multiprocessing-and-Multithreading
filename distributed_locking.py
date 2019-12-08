@@ -38,8 +38,9 @@ def lightning_order() -> None:
 
     # Use a "lock" key as the lock
     # => We need to set the value of the "lock" key to be unique for every
-    #    client, so that when releasing the lock, we know whether this lock has
-    #    been automatically released.
+    #    client, so that when releasing the lock, we know whether this lock is
+    #    still owned by this client, rather than automatically released due to
+    #    timeout.
     client_id = r.client_id()
     result = r.setnx(LOCK_KEY, client_id)
     while not result:  # If not acquiring the lock, block here
@@ -51,8 +52,9 @@ def lightning_order() -> None:
     r.expire(LOCK_KEY, 30)
     # But how do we set the expire time?
     # => Estimate the execution time of the business codes, and set the expire
-    #    time to be longer than it, so make sure the client who acquired the
+    #    time to be longer than it, to make sure the client who acquired the
     #    lock has enough time to execute the business codes.
+
     try:
         # Business codes
         remaining = int(r.get('stock'))
@@ -80,8 +82,9 @@ def lightning_order() -> None:
         # business codes, and some other client is able to acquire the same
         # lock, which is unsafe.
         # => We need to set the value of the "lock" key to be unique for every
-        #    client, so that when releasing the lock, we know whether this lock has
-        #    been automatically released.
+        #    client, so that when releasing the lock, we know whether this lock is
+        #    still owned by this client, rather than automatically released due to
+        #    timeout.
         lock_val = r.get(LOCK_KEY)
         if lock_val != client_id:
             raise Exception('Business codes timed out.')
